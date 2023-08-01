@@ -1,0 +1,82 @@
+before:
+  hooks:
+    - go mod download
+    - ./tools/completions.sh
+builds:
+  - env:
+      - CGO_ENABLED=0
+    ldflags: "-s -w -X main.version={{.Version}} -X main.commit={{.FullCommit}} -X main.date={{.CommitDate}}"
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: arm
+archives:
+  - name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else if eq .Arch "arm" }}ARM
+      {{- else if eq .Arch "arm64" }}ARM64
+      {{- else }}{{ .Arch }}{{ end }}
+    files:
+      - README.md
+      - LICENSE
+      - completions/*
+nfpms:
+  - file_name_template: "{{ .ConventionalFileName }}"
+    id: packages
+    description: CLI to download connectIQ resources
+    maintainer: Johan Lindell <johan@lindell.me>
+    license: Apache-2.0
+    contents:
+      - src: ./completions/connect-iq-manager.bash
+        dst: /etc/bash_completion.d/connect-iq-manager
+      - src: ./completions/connect-iq-manager.fish
+        dst: /usr/share/fish/completions/connect-iq-manager.fish
+      - src: ./completions/connect-iq-manager.zsh
+        dst: /usr/local/share/zsh/site-functions/_connect-iq-manager
+    formats:
+    - deb
+    - rpm
+    recommends:
+    - git
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+brews:
+  - name: connect-iq-manager
+    repository:
+      owner: lindell
+      name: homebrew-connect-iq-manager
+    goarm: 6
+    commit_author:
+      name: Johan Lindell
+      email: johan@lindell.me
+    description: CLI to download connectIQ resources
+    homepage: https://github.com/lindell/connect-iq-manager
+    license: "Apache-2.0"
+    folder: Formula
+    install: |-
+      bin.install "connect-iq-manager"
+      bash_completion.install "completions/connect-iq-manager.bash" => "connect-iq-manager"
+      zsh_completion.install "completions/connect-iq-manager.zsh" => "_connect-iq-manager"
+      fish_completion.install "completions/connect-iq-manager.fish"
+    test: |
+      system "#{bin}/connect-iq-manager", "version"
