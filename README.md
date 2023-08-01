@@ -4,14 +4,6 @@
 
 connect-iq-manager description.
 
-Clone it, and replace `lindell/connect-iq-manager` with `USERNAME/new-cli-name`,
-replace `connect-iq-manager` with `new-cli-name`,
-and update all TODOs.
-
-You also need to:
-* Set Write access in "Workflow permissions" for Actions.
-* Enable Code scanning
-
 ## Install
 
 ### Homebrew
