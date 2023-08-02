@@ -19,6 +19,7 @@ func RootCmd() *cobra.Command {
 
 	cmd.AddCommand(VersionCmd())
 	cmd.AddCommand(LoginCmd())
+	cmd.AddCommand(DownloadCmd())
 	configureConfig(cmd)
 
 	return cmd
