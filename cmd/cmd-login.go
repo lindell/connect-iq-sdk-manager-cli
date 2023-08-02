@@ -74,7 +74,7 @@ func getLoginCredentials(flag *pflag.FlagSet) (username, password string, err er
 
 	if password == "" {
 		fmt.Print("Enter Password: ")
-		bytePassword, err := term.ReadPassword(syscall.Stdin)
+		bytePassword, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
 			return "", "", err
 		}
