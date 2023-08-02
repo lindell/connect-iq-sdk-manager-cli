@@ -16,10 +16,9 @@ import (
 )
 
 func (m *Manager) Download(ctx context.Context) error {
-	if newCtx, err := m.setTokenToCtx(ctx); err != nil {
+	var err error
+	if ctx, err = m.setTokenToCtx(ctx); err != nil {
 		return err
-	} else {
-		ctx = newCtx
 	}
 
 	deviceInfos, err := client.GetDeviceInfo(ctx)
@@ -42,6 +41,12 @@ func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device c
 	if err != nil {
 		return err
 	}
+	deviceDir := path.Join(rootFolder, "Devices", device.Name)
+
+	if _, err := os.Stat(deviceDir); !os.IsNotExist(err) {
+		log.Info("Device folder already exist")
+		return nil
+	}
 
 	log.Info("Downloading device zip")
 	r, err := client.DownloadDevice(ctx, device)
@@ -62,8 +67,7 @@ func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device c
 	}
 
 	log.Info("Extracting device zip")
-	unzipDir := path.Join(rootFolder, "Devices", device.Name)
-	return unzip(f.Name(), unzipDir)
+	return unzip(f.Name(), deviceDir)
 }
 
 func unzip(source, destination string) error {
