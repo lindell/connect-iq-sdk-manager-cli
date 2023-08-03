@@ -8,8 +8,6 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/lindell/connect-iq-manager/internal/manager"
-	"github.com/lindell/connect-iq-manager/internal/storage"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -44,13 +42,9 @@ func login(cmd *cobra.Command, _ []string) error {
 		return errors.New("username and password has to be set")
 	}
 
-	store, err := storage.NewStore()
+	manager, err := NewManager()
 	if err != nil {
 		return err
-	}
-
-	manager := manager.Manager{
-		Store: store,
 	}
 
 	ctx := context.Background()

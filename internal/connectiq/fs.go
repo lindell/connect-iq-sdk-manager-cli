@@ -1,4 +1,4 @@
-package storage
+package connectiq
 
 import (
 	"os"
@@ -8,7 +8,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-func rootGarminFolder() (string, error) {
+// Get the folder where Garmin information is stored
+func RootGarminFolder() (string, error) {
 	if runtime.GOOS == "windows" {
 		appDataFolder := os.Getenv("APPDATA")
 		if appDataFolder == "" {

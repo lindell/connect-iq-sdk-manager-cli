@@ -4,13 +4,8 @@ import (
 	"context"
 
 	"github.com/lindell/connect-iq-manager/internal/client"
-	"github.com/lindell/connect-iq-manager/internal/storage"
 	"github.com/pkg/errors"
 )
-
-type Manager struct {
-	Store *storage.Store
-}
 
 func (m *Manager) Login(ctx context.Context, username, password string) error {
 	token, err := client.Login(ctx, username, password)

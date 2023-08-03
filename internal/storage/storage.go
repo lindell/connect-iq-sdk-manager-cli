@@ -14,7 +14,7 @@ type Store struct {
 }
 
 func NewStore() (*Store, error) {
-	path, err := rootGarminFolder()
+	path, err := connectiq.RootGarminFolder()
 	if err != nil {
 		return nil, err
 	}
@@ -42,6 +42,20 @@ func (s *Store) StoreToken(token connectiq.Token) error {
 	}
 
 	return nil
+}
+
+func (s *Store) GetToken() (connectiq.Token, error) {
+	bb, err := os.ReadFile(path.Join(s.rootPath, tokenFilename))
+	if err != nil {
+		return connectiq.Token{}, errors.WithMessage(err, "could not read token file")
+	}
+
+	var token connectiq.Token
+	if err := json.Unmarshal(bb, &token); err != nil {
+		return connectiq.Token{}, errors.WithMessage(err, "could not decode token")
+	}
+
+	return token, nil
 }
 
 func ensureFolderExist(path string) error {
