@@ -28,7 +28,7 @@ var tokenFilename = "token.json"
 
 func (s *Store) StoreToken(token connectiq.Token) error {
 	if err := ensureFolderExist(s.rootPath); err != nil {
-		return err
+		return errors.WithMessage(err, "could not create Garmin root folder")
 	}
 
 	encodedData, err := json.Marshal(token)
@@ -59,5 +59,5 @@ func (s *Store) GetToken() (connectiq.Token, error) {
 }
 
 func ensureFolderExist(path string) error {
-	return os.MkdirAll(path, 0600)
+	return os.MkdirAll(path, 0755)
 }
