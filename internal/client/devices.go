@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/lindell/connect-iq-manager/internal/connectiq"
 	"github.com/pkg/errors"
@@ -27,6 +28,8 @@ type DeviceInfo struct {
 	Hidden                bool   `json:"hidden"`
 	Faceit2Capable        bool   `json:"faceit2Capable"`
 }
+
+var timestampLayout = "2006-01-02 15:04:05"
 
 var devicesURL = "https://api.gcs.garmin.com/ciq-product-onboarding/devices?sdkManagerVersion=1.0.5"
 var deviceDownloadURL = "https://api.gcs.garmin.com/ciq-product-onboarding/devices/%s/ciqInfo" // %s is partNumber
@@ -55,7 +58,43 @@ func GetDeviceInfo(ctx context.Context) ([]DeviceInfo, error) {
 		return nil, errors.WithMessage(err, "could not decode device information")
 	}
 
-	return deviceInfo, nil
+	return removeDuplicateDevices(deviceInfo)
+}
+
+// removeDuplicateDevices removes any dublicate devices
+// For some reason, the API returns multiple devices with the same name, this function removes those
+func removeDuplicateDevices(devices []DeviceInfo) ([]DeviceInfo, error) {
+	deviceMap := map[string]DeviceInfo{}
+	for _, device := range devices {
+		if !device.CiqInfoFileExists {
+			continue
+		}
+
+		// If the device already exist, choose the one that was updated last
+		if existingDevice, exist := deviceMap[device.Name]; !exist {
+			deviceMap[device.Name] = device
+		} else {
+			existingTime, err := time.Parse(timestampLayout, existingDevice.LastUpdateTime)
+			if err != nil {
+				return nil, errors.WithMessage(err, "could not parse device last updated time")
+			}
+
+			newTime, err := time.Parse(timestampLayout, device.LastUpdateTime)
+			if err != nil {
+				return nil, errors.WithMessage(err, "could not parse device last updated time")
+			}
+
+			if newTime.After(existingTime) {
+				deviceMap[device.Name] = device
+			}
+		}
+	}
+
+	newDevices := make([]DeviceInfo, 0, len(deviceMap))
+	for _, device := range deviceMap {
+		newDevices = append(newDevices, device)
+	}
+	return newDevices, nil
 }
 
 func DownloadDevice(ctx context.Context, device DeviceInfo) (io.ReadCloser, error) {
