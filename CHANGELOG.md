@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/lindell/connect-iq-manager/compare/v0.2.1...v0.2.2) (2023-08-03)
+
+
+### Bug Fixes
+
+* remove duplicate devices before further processing ([c98632f](https://github.com/lindell/connect-iq-manager/commit/c98632f8d8f393d9a66fbfabc8b0fb8f618a9f1f))
+
 ## [0.2.1](https://github.com/lindell/connect-iq-manager/compare/v0.2.0...v0.2.1) (2023-08-03)
 
 
