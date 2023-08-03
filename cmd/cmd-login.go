@@ -19,9 +19,12 @@ func LoginCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
 		Short: "Login the user to the Garmin.",
-		Long:  "Login the user to the Garmin.",
-		Args:  cobra.NoArgs,
-		RunE:  login,
+		Long: `Login the user to the Garmin.
+The credentials can either be set via the --username and --password config,
+via GARMIN_USERNAME and GARMIN_PASSWORD environment variables,
+or be inputed interactively.`,
+		Args: cobra.NoArgs,
+		RunE: login,
 	}
 
 	cmd.Flags().StringP("username", "", "", "The Garmin username.")
@@ -64,6 +67,14 @@ func getLoginCredentials(flag *pflag.FlagSet) (username, password string, err er
 	password, _ = flag.GetString("password")
 
 	if username == "" {
+		username = os.Getenv("GARMIN_USERNAME")
+	}
+	if password == "" {
+		password = os.Getenv("GARMIN_PASSWORD")
+	}
+
+	// Ask the user interactively if still not set
+	if username == "" {
 		fmt.Print("Enter Username: ")
 		reader := bufio.NewReader(os.Stdin)
 		username, err = reader.ReadString('\n')
@@ -71,7 +82,6 @@ func getLoginCredentials(flag *pflag.FlagSet) (username, password string, err er
 			return "", "", err
 		}
 	}
-
 	if password == "" {
 		fmt.Print("Enter Password: ")
 		bytePassword, err := term.ReadPassword(int(syscall.Stdin))
