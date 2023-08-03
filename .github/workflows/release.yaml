@@ -15,6 +15,7 @@ jobs:
           release-type: simple
           package-name: connect-iq-manager
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false},{"type":"dep","section":"Dependencies","hidden":false}]'
+          release-as: "0.1.0"
 
       - uses: actions/checkout@v3
         with:
