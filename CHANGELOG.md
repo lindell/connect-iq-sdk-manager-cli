@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/lindell/connect-iq-manager/compare/v0.1.0...v0.2.0) (2023-08-03)
+
+
+### Features
+
+* added option to set login credentials via env vars ([ba8cddb](https://github.com/lindell/connect-iq-manager/commit/ba8cddba3c0c6105362fca21fed3a73cb0143a62))
+
+
+### Bug Fixes
+
+* fixed old cli description ([fd9b2b1](https://github.com/lindell/connect-iq-manager/commit/fd9b2b1f1cf5891bca6d34f290c7f2271678e1cf))
+
 ## 0.1.0 (2023-08-03)
 
 
