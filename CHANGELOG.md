@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/lindell/connect-iq-manager/compare/v0.2.0...v0.2.1) (2023-08-03)
+
+
+### Bug Fixes
+
+* fixed permission of garmin folder ([e57d221](https://github.com/lindell/connect-iq-manager/commit/e57d221cd3afd3f177e7b22690a4a36f4557b88a))
+
 ## [0.2.0](https://github.com/lindell/connect-iq-manager/compare/v0.1.0...v0.2.0) (2023-08-03)
 
 
