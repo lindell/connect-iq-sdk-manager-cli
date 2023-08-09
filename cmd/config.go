@@ -47,7 +47,7 @@ func initializeStaticConfig(cmd *cobra.Command) error {
 
 	v.SetConfigType("yaml")
 	v.SetConfigName("config")
-	v.AddConfigPath("$HOME/.connect-iq-manager")
+	v.AddConfigPath("$HOME/.connect-iq-sdk-manager")
 
 	// Attempt to read the config file, gracefully ignoring errors
 	// caused by a config file not being found. Return an error

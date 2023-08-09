@@ -3,7 +3,7 @@ package manager
 import (
 	"context"
 
-	"github.com/lindell/connect-iq-manager/internal/client"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
 	"github.com/pkg/errors"
 )
 

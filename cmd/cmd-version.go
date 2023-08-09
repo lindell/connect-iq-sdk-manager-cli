@@ -12,8 +12,8 @@ import (
 func VersionCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
-		Short: "Get the version of connect-iq-manager.",
-		Long:  "Get the version of connect-iq-manager.",
+		Short: "Get the version of connect-iq-sdk-manager.",
+		Long:  "Get the version of connect-iq-sdk-manager.",
 		Args:  cobra.NoArgs,
 		Run:   version,
 	}

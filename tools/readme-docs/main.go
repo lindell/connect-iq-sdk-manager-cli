@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/lindell/connect-iq-manager/cmd"
+	"github.com/lindell/connect-iq-sdk-manager-cli/cmd"
 )
 
 const templatePath = "./docs/README.template.md"

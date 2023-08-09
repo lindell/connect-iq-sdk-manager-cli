@@ -1,4 +1,4 @@
-module github.com/lindell/connect-iq-manager
+module github.com/lindell/connect-iq-sdk-manager-cli
 
 go 1.19
 

@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/lindell/connect-iq-manager/internal/connectiq"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
 )
 
 type tokenResponse struct {

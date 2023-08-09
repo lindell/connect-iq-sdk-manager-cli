@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/lindell/connect-iq-manager/cmd"
+	"github.com/lindell/connect-iq-sdk-manager-cli/cmd"
 )
 
 var version = "development"

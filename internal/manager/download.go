@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/lindell/connect-iq-manager/internal/client"
-	"github.com/lindell/connect-iq-manager/internal/connectiq"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )

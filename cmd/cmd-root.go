@@ -10,7 +10,7 @@ import (
 // RootCmd is the root command containing all subcommands
 func RootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "connect-iq-manager",
+		Use:   "connect-iq-sdk-manager",
 		Short: "CLI to download connectIQ resources",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			return initializeConfig(cmd) // Bind configs that are not flags

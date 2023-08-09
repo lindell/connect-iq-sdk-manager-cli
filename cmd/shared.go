@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/lindell/connect-iq-manager/internal/manager"
-	"github.com/lindell/connect-iq-manager/internal/storage"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/manager"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/storage"
 )
 
 func NewManager() (manager.Manager, error) {

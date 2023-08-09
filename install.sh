@@ -5,13 +5,13 @@ set -e
 usage() {
   this=$1
   cat <<EOF
-$this: download go binaries for lindell/connect-iq-manager
+$this: download go binaries for lindell/connect-iq-sdk-manager-cli
 
 Usage: $this [-b] bindir [-d] [tag]
   -b sets bindir or installation directory, Defaults to /usr/local/bin
   -d turns on debug logging
    [tag] is a tag from
-   https://github.com/lindell/connect-iq-manager/releases
+   https://github.com/lindell/connect-iq-sdk-manager-cli/releases
    If tag is missing, then the latest will be used.
 
 EOF
@@ -64,18 +64,18 @@ execute() {
 }
 get_binaries() {
   case "$PLATFORM" in
-    darwin/386) BINARIES="connect-iq-manager" ;;
-    darwin/amd64) BINARIES="connect-iq-manager" ;;
-    darwin/arm64) BINARIES="connect-iq-manager" ;;
-    darwin/armv6) BINARIES="connect-iq-manager" ;;
-    linux/386) BINARIES="connect-iq-manager" ;;
-    linux/amd64) BINARIES="connect-iq-manager" ;;
-    linux/arm64) BINARIES="connect-iq-manager" ;;
-    linux/armv6) BINARIES="connect-iq-manager" ;;
-    windows/386) BINARIES="connect-iq-manager" ;;
-    windows/amd64) BINARIES="connect-iq-manager" ;;
-    windows/arm64) BINARIES="connect-iq-manager" ;;
-    windows/armv6) BINARIES="connect-iq-manager" ;;
+    darwin/386) BINARIES="connect-iq-sdk-manager" ;;
+    darwin/amd64) BINARIES="connect-iq-sdk-manager" ;;
+    darwin/arm64) BINARIES="connect-iq-sdk-manager" ;;
+    darwin/armv6) BINARIES="connect-iq-sdk-manager" ;;
+    linux/386) BINARIES="connect-iq-sdk-manager" ;;
+    linux/amd64) BINARIES="connect-iq-sdk-manager" ;;
+    linux/arm64) BINARIES="connect-iq-sdk-manager" ;;
+    linux/armv6) BINARIES="connect-iq-sdk-manager" ;;
+    windows/386) BINARIES="connect-iq-sdk-manager" ;;
+    windows/amd64) BINARIES="connect-iq-sdk-manager" ;;
+    windows/arm64) BINARIES="connect-iq-sdk-manager" ;;
+    windows/armv6) BINARIES="connect-iq-sdk-manager" ;;
     *)
       log_crit "platform $PLATFORM is not supported.  Make sure this script is up-to-date and file request at https://github.com/${PREFIX}/issues/new"
       exit 1
@@ -354,10 +354,10 @@ End of functions from https://github.com/client9/shlib
 ------------------------------------------------------------------------
 EOF
 
-PROJECT_NAME="connect-iq-manager"
+PROJECT_NAME="connect-iq-sdk-manager"
 OWNER=lindell
-REPO="connect-iq-manager"
-BINARY=connect-iq-manager
+REPO="connect-iq-sdk-manager"
+BINARY=connect-iq-sdk-manager
 FORMAT="tar.gz"
 OS=$(uname_os)
 ARCH=$(uname_arch)

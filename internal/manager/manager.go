@@ -3,8 +3,8 @@ package manager
 import (
 	"context"
 
-	"github.com/lindell/connect-iq-manager/internal/connectiq"
-	"github.com/lindell/connect-iq-manager/internal/storage"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/storage"
 )
 
 type Manager struct {
