@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.2.1...v0.3.0) (2023-08-09)
+
+
+### Features
+
+* renamed to connect-iq-sdk-manager(-cli) ([0c05f57](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/0c05f574c0cb445be191ec4306f71ef845c292e7))
+
+
+### Bug Fixes
+
+* remove duplicate devices before further processing ([c98632f](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/c98632f8d8f393d9a66fbfabc8b0fb8f618a9f1f))
+
 ## [0.2.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.2.0...v0.2.1) (2023-08-03)
 
 
