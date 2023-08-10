@@ -354,10 +354,10 @@ End of functions from https://github.com/client9/shlib
 ------------------------------------------------------------------------
 EOF
 
-PROJECT_NAME="connect-iq-sdk-manager"
+PROJECT_NAME="connect-iq-sdk-manager-cli"
 OWNER=lindell
-REPO="connect-iq-sdk-manager"
-BINARY=connect-iq-sdk-manager
+REPO="connect-iq-sdk-manager-cli"
+BINARY=connect-iq-sdk-manager-cli
 FORMAT="tar.gz"
 OS=$(uname_os)
 ARCH=$(uname_arch)
