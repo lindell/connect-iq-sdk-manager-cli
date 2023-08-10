@@ -13,6 +13,10 @@ type Store struct {
 	rootPath string
 }
 
+var (
+	ErrTokenNotFound error = errors.New("token not found")
+)
+
 func NewStore() (*Store, error) {
 	path, err := connectiq.RootGarminFolder()
 	if err != nil {
@@ -47,6 +51,9 @@ func (s *Store) StoreToken(token connectiq.Token) error {
 func (s *Store) GetToken() (connectiq.Token, error) {
 	bb, err := os.ReadFile(path.Join(s.rootPath, tokenFilename))
 	if err != nil {
+		if os.IsNotExist(err) {
+			return connectiq.Token{}, ErrTokenNotFound
+		}
 		return connectiq.Token{}, errors.WithMessage(err, "could not read token file")
 	}
 
