@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.3.0...v0.3.1) (2023-08-10)
+
+
+### Bug Fixes
+
+* changed binary name ([9200a0a](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/9200a0a53126906c210a8e3fc1f5d439a84f419a))
+* fixed install script project names ([d20b38d](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/d20b38d62a7a210b5c2c26e8ddcf46f7235b6729))
+
 ## [0.3.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.2.1...v0.3.0) (2023-08-09)
 
 
