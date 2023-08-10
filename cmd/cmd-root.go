@@ -1,9 +1,6 @@
 package cmd
 
 import (
-	"math/rand"
-	"time"
-
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +10,12 @@ func RootCmd() *cobra.Command {
 		Use:   "connect-iq-sdk-manager",
 		Short: "CLI to download connectIQ resources",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			return initializeConfig(cmd) // Bind configs that are not flags
+			// Bind configs that are not flags
+			if err := initializeConfig(cmd); err != nil {
+				return err
+			}
+
+			return logFlagInit(cmd)
 		},
 	}
 
@@ -21,10 +23,7 @@ func RootCmd() *cobra.Command {
 	cmd.AddCommand(LoginCmd())
 	cmd.AddCommand(DownloadCmd())
 	configureConfig(cmd)
+	configureLogging(cmd)
 
 	return cmd
-}
-
-func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
 }

@@ -38,22 +38,26 @@ func setHeaders(header http.Header) {
 // Regexp to find the ticket on the success page
 var ticketRegexp = regexp.MustCompile("ticket=([A-Za-z0-9-]+)")
 
+var client = &http.Client{
+	Transport: loggingRoundTripper{},
+}
+
 func Login(ctx context.Context, username, password string) (connectiq.Token, error) {
 	jar, err := cookiejar.New(nil)
 	if err != nil {
 		return connectiq.Token{}, err
 	}
 
-	client := &http.Client{
-		Jar: jar,
-	}
+	httpClient := &http.Client{}
+	*httpClient = *client
+	httpClient.Jar = jar
 
-	ticket, err := login(ctx, client, username, password)
+	ticket, err := login(ctx, httpClient, username, password)
 	if err != nil {
 		return connectiq.Token{}, err
 	}
 
-	token, err := exchangeTicket(ctx, client, ticket)
+	token, err := exchangeTicket(ctx, httpClient, ticket)
 	if err != nil {
 		return connectiq.Token{}, err
 	}
@@ -156,7 +160,7 @@ func refreshToken(ctx context.Context, refreshToken string) (tokenResponse, erro
 
 	req.Header.Set("content-type", "application/x-www-form-urlencoded")
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return tokenResponse{}, err
 	}

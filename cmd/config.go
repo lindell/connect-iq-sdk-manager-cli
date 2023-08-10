@@ -9,7 +9,7 @@ import (
 )
 
 func configureConfig(cmd *cobra.Command) {
-	cmd.Flags().StringP("config", "", "", "Path of the config file.")
+	cmd.PersistentFlags().StringP("config", "", "", "Path of the config file.")
 }
 
 func initializeConfig(cmd *cobra.Command) error {
