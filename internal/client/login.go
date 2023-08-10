@@ -3,18 +3,19 @@ package client
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
+	"github.com/pkg/errors"
 )
 
 type tokenResponse struct {
@@ -23,7 +24,7 @@ type tokenResponse struct {
 	ExpiresIn             int    `json:"expires_in"`
 	Scope                 string `json:"scope"`
 	RefreshToken          string `json:"refresh_token"`
-	RefreshTokenExpiresIn string `json:"refresh_token_expires_in"`
+	RefreshTokenExpiresIn string `json:"refresh_token_expires_in"` // For some reason this is a string!
 	CustomerID            string `json:"customerId"`
 }
 
@@ -34,6 +35,7 @@ func setHeaders(header http.Header) {
 	header.Set("origin", "https://sso.garmin.com")
 }
 
+// Regexp to find the ticket on the success page
 var ticketRegexp = regexp.MustCompile("ticket=([A-Za-z0-9-]+)")
 
 func Login(ctx context.Context, username, password string) (connectiq.Token, error) {
@@ -56,10 +58,16 @@ func Login(ctx context.Context, username, password string) (connectiq.Token, err
 		return connectiq.Token{}, err
 	}
 
-	return connectiq.Token{
-		AccessToken: token.AccessToken,
-		ExpiresAt:   time.Now().Add(time.Duration(token.ExpiresIn) * time.Second),
-	}, nil
+	return convertToken(token)
+}
+
+func RefreshToken(ctx context.Context, rToken string) (connectiq.Token, error) {
+	token, err := refreshToken(ctx, rToken)
+	if err != nil {
+		return connectiq.Token{}, err
+	}
+
+	return convertToken(token)
 }
 
 func login(ctx context.Context, client *http.Client, username, password string) (ticket string, err error) {
@@ -132,6 +140,53 @@ func exchangeTicket(ctx context.Context, client *http.Client, ticket string) (to
 	}
 
 	return tokenResp, nil
+}
+
+func refreshToken(ctx context.Context, refreshToken string) (tokenResponse, error) {
+	data := url.Values{}
+	data.Set("grant_type", "refresh_token")
+	data.Set("client_id", "CIQ_SDK_MANAGER")
+	data.Set("refresh_token", refreshToken)
+	data.Set("service_url", "https://sso.garmin.com/sso/embed")
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, exchangeURL, strings.NewReader(data.Encode()))
+	if err != nil {
+		return tokenResponse{}, err
+	}
+
+	req.Header.Set("content-type", "application/x-www-form-urlencoded")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return tokenResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	if err := expectStatusCode(resp, http.StatusOK); err != nil {
+		return tokenResponse{}, errors.WithMessage(err, "could not refresh token")
+	}
+
+	var tokenResp tokenResponse
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
+		return tokenResponse{}, err
+	}
+
+	return tokenResp, nil
+}
+
+// convertToken converts token from the Garmin API domain to our domain
+func convertToken(token tokenResponse) (connectiq.Token, error) {
+	refreshTokenExpiresInInt, err := strconv.Atoi(token.RefreshTokenExpiresIn)
+	if err != nil {
+		return connectiq.Token{}, errors.WithMessage(err, "could not parse refresh token expiration")
+	}
+
+	return connectiq.Token{
+		AccessToken:           token.AccessToken,
+		ExpiresAt:             time.Now().Add(time.Duration(token.ExpiresIn) * time.Second),
+		RefreshToken:          token.RefreshToken,
+		RefreshTokenExpiresAt: time.Now().Add(time.Duration(refreshTokenExpiresInInt) * time.Second),
+	}, nil
 }
 
 // formValuesFromInitialRequest gets (hidden) input fields that can be used in the login request
