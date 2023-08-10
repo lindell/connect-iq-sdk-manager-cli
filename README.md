@@ -27,6 +27,21 @@ All configuration can be done through command line flags, configuration files or
 
 
 
+<details>
+  <summary>All available version options</summary>
+
+```yaml
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+```
+</details>
+
 
 ## Usage
 
@@ -37,7 +52,13 @@ All configuration can be done through command line flags, configuration files or
 Get the version of connect-iq-sdk-manager.
 ```
 Usage:
-  connect-iq-sdk-manager version
+  connect-iq-sdk-manager version [flags]
+
+Global Flags:
+      --config string       Path of the config file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
 ```
 
 
