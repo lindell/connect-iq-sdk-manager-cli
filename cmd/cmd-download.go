@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/manager"
 	"github.com/spf13/cobra"
 )
 
@@ -16,16 +17,25 @@ func DownloadCmd() *cobra.Command {
 		RunE:  download,
 	}
 
+	configureDeviceCmd(cmd)
+
 	return cmd
 }
 
-func download(_ *cobra.Command, _ []string) error {
+func download(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
 
-	manager, err := NewManager()
+	mngr, err := NewManager()
 	if err != nil {
 		return err
 	}
 
-	return manager.Download(ctx)
+	deviceFilters, err := getDeviceFilters(cmd)
+	if err != nil {
+		return err
+	}
+
+	return mngr.Download(ctx, manager.DownloadConfig{
+		DeviceFilters: deviceFilters,
+	})
 }

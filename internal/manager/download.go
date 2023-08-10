@@ -15,7 +15,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (m *Manager) Download(ctx context.Context) error {
+type DownloadConfig struct {
+	DeviceFilters DeviceFilters
+}
+
+func (m *Manager) Download(ctx context.Context, config DownloadConfig) error {
 	var err error
 	if ctx, err = m.setTokenToCtx(ctx); err != nil {
 		return err
@@ -25,6 +29,13 @@ func (m *Manager) Download(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+
+	deviceInfos, err = filterDevices(deviceInfos, config.DeviceFilters)
+	if err != nil {
+		return err
+	}
+
+	log.Infof("Downloading %d devices.", len(deviceInfos))
 
 	for _, device := range deviceInfos {
 		log := log.WithField("device", device.Name)
