@@ -3,7 +3,8 @@ before:
     - go mod download
     - ./tools/completions.sh
 builds:
-  - env:
+  - binary: connect-iq-sdk-manager
+    env:
       - CGO_ENABLED=0
     ldflags: "-s -w -X main.version={{.Version}} -X main.commit={{.FullCommit}} -X main.date={{.CommitDate}}"
     goos:
