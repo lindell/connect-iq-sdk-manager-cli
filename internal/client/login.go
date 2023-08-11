@@ -38,6 +38,8 @@ func setHeaders(header http.Header) {
 // Regexp to find the ticket on the success page
 var ticketRegexp = regexp.MustCompile("ticket=([A-Za-z0-9-]+)")
 
+var loginStatusRegexp = regexp.MustCompile(`var\s+status\s*=\s*"(.+)"`)
+
 var client = &http.Client{
 	Transport: loggingRoundTripper{},
 }
@@ -98,7 +100,11 @@ func login(ctx context.Context, client *http.Client, username, password string) 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("could not login, status code: %d", resp.StatusCode)
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return "", errors.New("and unable to load the login body")
+		}
+		return "", parseLoginFailure(body)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -107,11 +113,28 @@ func login(ctx context.Context, client *http.Client, username, password string) 
 	}
 	results := ticketRegexp.FindStringSubmatch(string(body))
 	if results == nil {
-		return "", errors.New("could not find ticket") // TODO: Return actual error
+		return "", parseLoginFailure(body)
 	}
 	ticket = results[1]
 
 	return ticket, nil
+}
+
+func parseLoginFailure(body []byte) error {
+	results := loginStatusRegexp.FindStringSubmatch(string(body))
+	if results == nil {
+		return errors.New("unknown reason for login failure")
+	}
+
+	msg := results[1]
+	switch msg {
+	case "FAIL":
+		msg = "wrong usename or password?"
+	case "ACCOUNT_LOCKED":
+		msg = "your account has been locked. Please reset your password"
+	}
+
+	return errors.New(msg)
 }
 
 func exchangeTicket(ctx context.Context, client *http.Client, ticket string) (tokenResponse, error) {
