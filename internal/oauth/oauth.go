@@ -45,7 +45,7 @@ func GetToken(ctx context.Context) (token string, serviceURL string, err error) 
 	mux := http.NewServeMux()
 	mux.HandleFunc(urlDone, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		ticket := r.URL.Query().Get("ticket")
-		log.Info(ticket)
+		log.Debug("Received ticket")
 
 		buf := bytes.NewBuffer(doneHTML)
 		_, _ = io.Copy(rw, buf)
