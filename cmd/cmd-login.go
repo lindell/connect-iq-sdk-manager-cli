@@ -1,17 +1,14 @@
 package cmd
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"os"
 	"strings"
-	"syscall"
 
-	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
-	"golang.org/x/term"
 )
 
 // LoginCmd logs the user in to the garmin service
@@ -36,14 +33,7 @@ or be inputed interactively.`,
 func login(cmd *cobra.Command, _ []string) error {
 	flag := cmd.Flags()
 
-	username, password, err := getLoginCredentials(flag)
-	if err != nil {
-		return errors.WithMessage(err, "could not get credentials")
-	}
-
-	if username == "" || password == "" {
-		return errors.New("username and password has to be set")
-	}
+	username, password := getLoginCredentials(flag)
 
 	manager, err := NewManager()
 	if err != nil {
@@ -52,9 +42,18 @@ func login(cmd *cobra.Command, _ []string) error {
 
 	ctx := context.Background()
 
-	err = manager.Login(ctx, username, password)
-	if err != nil {
-		return err
+	if username != "" && password != "" {
+		log.Debug("Using credentials to simulate oauth login")
+		err = manager.LoginWithCredentials(ctx, username, password)
+		if err != nil {
+			return err
+		}
+	} else {
+		log.Debug("Using Oauth flow to login")
+		err = manager.LoginWithOauth(ctx)
+		if err != nil {
+			return err
+		}
 	}
 
 	fmt.Println("Successfully logged in")
@@ -62,7 +61,7 @@ func login(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-func getLoginCredentials(flag *pflag.FlagSet) (username, password string, err error) {
+func getLoginCredentials(flag *pflag.FlagSet) (username, password string) {
 	username, _ = flag.GetString("username")
 	password, _ = flag.GetString("password")
 
@@ -73,24 +72,5 @@ func getLoginCredentials(flag *pflag.FlagSet) (username, password string, err er
 		password = os.Getenv("GARMIN_PASSWORD")
 	}
 
-	// Ask the user interactively if still not set
-	if username == "" {
-		fmt.Print("Enter Username: ")
-		reader := bufio.NewReader(os.Stdin)
-		username, err = reader.ReadString('\n')
-		if err != nil {
-			return "", "", err
-		}
-	}
-	if password == "" {
-		fmt.Print("Enter Password: ")
-		bytePassword, err := term.ReadPassword(int(syscall.Stdin))
-		if err != nil {
-			return "", "", err
-		}
-		fmt.Print("\n")
-		password = string(bytePassword)
-	}
-
-	return strings.TrimSpace(username), strings.TrimSpace(password), nil
+	return strings.TrimSpace(username), strings.TrimSpace(password)
 }
