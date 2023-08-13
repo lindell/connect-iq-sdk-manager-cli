@@ -3,6 +3,7 @@ package client
 import (
 	"net/http"
 	"net/http/httputil"
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -30,7 +31,14 @@ func (l loggingRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) 
 
 	var res []byte
 	if resp != nil {
-		res, _ = httputil.DumpResponse(resp, true)
+		getBody := true
+
+		cdHeader := resp.Header.Get("Content-Disposition")
+		if strings.HasPrefix(cdHeader, "attachment") {
+			getBody = false
+		}
+
+		res, _ = httputil.DumpResponse(resp, getBody)
 	}
 
 	logger := log.WithFields(log.Fields{
