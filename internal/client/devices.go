@@ -43,7 +43,7 @@ func GetDeviceInfo(ctx context.Context) ([]DeviceInfo, error) {
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func DownloadDevice(ctx context.Context, device DeviceInfo) (io.ReadCloser, erro
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}

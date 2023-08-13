@@ -30,6 +30,7 @@ type tokenResponse struct {
 
 const loginURL = `https://sso.garmin.com/sso/signin?service=https%3A%2F%2Fsso.garmin.com%2Fsso%2Fembed&clientId=ConnectIqSdkManager`
 const exchangeURL = "https://services.garmin.com/api/oauth/token"
+const serviceURL = "https://sso.garmin.com/sso/embed"
 
 func setHeaders(header http.Header) {
 	header.Set("origin", "https://sso.garmin.com")
@@ -59,12 +60,7 @@ func Login(ctx context.Context, username, password string) (connectiq.Token, err
 		return connectiq.Token{}, err
 	}
 
-	token, err := exchangeTicket(ctx, httpClient, ticket)
-	if err != nil {
-		return connectiq.Token{}, err
-	}
-
-	return convertToken(token)
+	return ExchangeTicket(ctx, ticket, serviceURL)
 }
 
 func RefreshToken(ctx context.Context, rToken string) (connectiq.Token, error) {
@@ -137,12 +133,22 @@ func parseLoginFailure(body []byte) error {
 	return errors.New(msg)
 }
 
-func exchangeTicket(ctx context.Context, client *http.Client, ticket string) (tokenResponse, error) {
+// ExchangeTicket takes a ticket from the Oauth flow, and exhanges it for a token to be used in with the API
+func ExchangeTicket(ctx context.Context, ticket, serviceURL string) (connectiq.Token, error) {
+	token, err := exchangeTicket(ctx, ticket, serviceURL)
+	if err != nil {
+		return connectiq.Token{}, err
+	}
+
+	return convertToken(token)
+}
+
+func exchangeTicket(ctx context.Context, ticket, serviceURL string) (tokenResponse, error) {
 	data := url.Values{}
 	data.Set("grant_type", "service_ticket")
 	data.Set("client_id", "CIQ_SDK_MANAGER")
 	data.Set("service_ticket", ticket)
-	data.Set("service_url", "https://sso.garmin.com/sso/embed")
+	data.Set("service_url", serviceURL)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, exchangeURL, strings.NewReader(data.Encode()))
 	if err != nil {
@@ -174,7 +180,7 @@ func refreshToken(ctx context.Context, refreshToken string) (tokenResponse, erro
 	data.Set("grant_type", "refresh_token")
 	data.Set("client_id", "CIQ_SDK_MANAGER")
 	data.Set("refresh_token", refreshToken)
-	data.Set("service_url", "https://sso.garmin.com/sso/embed")
+	data.Set("service_url", serviceURL)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, exchangeURL, strings.NewReader(data.Encode()))
 	if err != nil {
