@@ -21,7 +21,8 @@ func RootCmd() *cobra.Command {
 
 	cmd.AddCommand(VersionCmd())
 	cmd.AddCommand(LoginCmd())
-	cmd.AddCommand(DownloadCmd())
+	cmd.AddCommand(DeviceCmd())
+
 	configureConfig(cmd)
 	configureLogging(cmd)
 

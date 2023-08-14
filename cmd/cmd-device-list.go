@@ -7,22 +7,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// DownloadCmd downloads devices
-func DownloadCmd() *cobra.Command {
+// DeviceListCmd list devices
+func DeviceListCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "download",
-		Short: "Download resources.",
-		Long:  "Download resources.",
+		Use:   "list",
+		Short: "List devices",
 		Args:  cobra.NoArgs,
-		RunE:  download,
+		RunE:  listDevices,
 	}
-
-	configureDeviceCmd(cmd)
 
 	return cmd
 }
 
-func download(cmd *cobra.Command, _ []string) error {
+func listDevices(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
 
 	mngr, err := NewManager()
@@ -35,7 +32,7 @@ func download(cmd *cobra.Command, _ []string) error {
 		return err
 	}
 
-	return mngr.Download(ctx, manager.DownloadConfig{
+	return mngr.ListDevices(ctx, manager.DeviceListConfig{
 		DeviceFilters: deviceFilters,
 	})
 }

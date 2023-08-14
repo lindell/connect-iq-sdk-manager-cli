@@ -12,7 +12,7 @@ import (
 const defaultManifest = "manifest.xml"
 
 func configureDeviceCmd(cmd *cobra.Command) {
-	flags := cmd.Flags()
+	flags := cmd.PersistentFlags()
 
 	flags.StringSliceP("device", "d", nil, "The device(s) that should be used.")
 	flags.StringP("manifest", "m", "", "Path to the manifest file.")
