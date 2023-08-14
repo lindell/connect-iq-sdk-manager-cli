@@ -2,10 +2,8 @@ package manager
 
 import (
 	"context"
-	"os"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
-	"github.com/olekukonko/tablewriter"
 )
 
 type DeviceListConfig struct {
@@ -28,23 +26,11 @@ func (m *Manager) ListDevices(ctx context.Context, config DeviceListConfig) erro
 		return err
 	}
 
-	table := tablewriter.NewWriter(os.Stdout)
+	table := createTable()
 	table.SetHeader([]string{"NAME", "GROUP"})
-	table.SetAutoWrapText(true)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
-	table.SetCenterSeparator("")
-	table.SetColumnSeparator("")
-	table.SetRowSeparator("")
-	table.SetHeaderLine(false)
-	table.SetBorder(false)
-	table.SetTablePadding("\t")
-	table.SetNoWhiteSpace(true)
-
 	for _, d := range deviceInfos {
 		table.Append(deviceToRow(d))
 	}
-
 	table.Render()
 
 	return nil
