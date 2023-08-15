@@ -2,7 +2,7 @@
   connect-iq-sdk-manager
 </h1>
 
-connect-iq-sdk-manager description.
+connect-iq-sdk-manager handles and downloads SDKs and other resources connected to ConnectIQ development. It aims to have parity with the official GUI sdk manager. 
 
 ## Install
 
