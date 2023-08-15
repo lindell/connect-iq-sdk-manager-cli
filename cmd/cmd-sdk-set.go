@@ -8,25 +8,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const versionDesc = `The version argument can be a specific version or a semver-range.
-For example: ^6.2.0 or >=4.0.0 or 4.2.1`
-
-// SDKDownloadCmd downloads an sdk
-func SDKDownloadCmd() *cobra.Command {
+// SDKSetCmd sets the current version of the SDK
+func SDKSetCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "download version",
-		Short: "Download SDK",
-		Long: `Download SDK.
+		Use:   "set version",
+		Short: "Set which SDK to be used",
+		Long: `Set which SDK to be used. If it does not exist, it will be downloaded
 
 ` + versionDesc,
 		Args: cobra.ExactArgs(1),
-		RunE: downloadSDKs,
+		RunE: setSDK,
 	}
 
 	return cmd
 }
 
-func downloadSDKs(_ *cobra.Command, args []string) error {
+func setSDK(_ *cobra.Command, args []string) error {
 	ctx := context.Background()
 
 	mngr, err := NewManager()
@@ -39,5 +36,5 @@ func downloadSDKs(_ *cobra.Command, args []string) error {
 		return errors.WithMessage(err, "could not parse version contraint")
 	}
 
-	return mngr.DownloadSDK(ctx, semverConstraint)
+	return mngr.SetSDK(ctx, semverConstraint)
 }

@@ -21,29 +21,45 @@ func (m *Manager) DownloadSDK(ctx context.Context, semverConstraint *semver.Cons
 
 	log.Infof("Downloading %s", sdk.Version)
 
-	// Find where to place the sdk in the filesystem
-	rootFolder, err := connectiq.RootGarminFolder()
+	sdkDir, err := sdkPath(sdk)
 	if err != nil {
 		return err
 	}
-	filename, err := sdk.Filename()
-	if err != nil {
-		return err
-	}
-	sdkDir := path.Join(rootFolder, "Sdks", strings.TrimSuffix(filename, ".zip"))
 
 	if _, err := os.Stat(sdkDir); !os.IsNotExist(err) {
 		log.Info("SDK folder already exist, skip download")
 		return nil
 	}
 
+	return downloadSDK(ctx, sdk)
+}
+
+func downloadSDK(ctx context.Context, sdk client.SDK) error {
 	r, err := client.DownloadSDK(ctx, sdk)
 	if err != nil {
 		return err
 	}
 	defer r.Close()
 
+	sdkDir, err := sdkPath(sdk)
+	if err != nil {
+		return err
+	}
+
 	return fetchAndExtract(r, sdkDir)
+}
+
+func sdkPath(sdk client.SDK) (string, error) {
+	sdksFolder, err := connectiq.SDKsFolder()
+	if err != nil {
+		return "", err
+	}
+	filename, err := sdk.Filename()
+	if err != nil {
+		return "", err
+	}
+
+	return path.Join(sdksFolder, strings.TrimSuffix(filename, ".zip")), nil
 }
 
 func latestMatchingSDK(ctx context.Context, semverConstraint *semver.Constraints) (client.SDK, error) {
