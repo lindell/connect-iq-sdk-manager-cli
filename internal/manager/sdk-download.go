@@ -2,7 +2,6 @@ package manager
 
 import (
 	"context"
-	"io"
 	"os"
 	"path"
 	"strings"
@@ -15,16 +14,10 @@ import (
 )
 
 func (m *Manager) DownloadSDK(ctx context.Context, semverConstraint *semver.Constraints) error {
-	// Find the SDK to download
-	sdks, err := client.GetSDKs(ctx)
+	sdk, err := latestMatchingSDK(ctx, semverConstraint)
 	if err != nil {
-		return errors.WithMessage(err, "could not fetch SDKs")
+		return err
 	}
-	sdks = filterAndSortSDKs(sdks, semverConstraint)
-	if len(sdks) == 0 {
-		return errors.Errorf("no SDKs matched %q", semverConstraint.String())
-	}
-	sdk := sdks[0]
 
 	log.Infof("Downloading %s", sdk.Version)
 
@@ -50,17 +43,18 @@ func (m *Manager) DownloadSDK(ctx context.Context, semverConstraint *semver.Cons
 	}
 	defer r.Close()
 
-	// Save the zip to a temporary file
-	f, err := os.CreateTemp(os.TempDir(), "sdk-*.zip")
-	if err != nil {
-		return errors.WithMessage(err, "could not create tmp device file")
-	}
-	defer os.Remove(f.Name())
-	defer f.Close()
-	if _, err := io.Copy(f, r); err != nil {
-		return err
-	}
+	return fetchAndExtract(r, sdkDir)
+}
 
-	log.Info("Extracting sdk zip")
-	return unzip(f.Name(), sdkDir)
+func latestMatchingSDK(ctx context.Context, semverConstraint *semver.Constraints) (client.SDK, error) {
+	// Find the SDK to download
+	sdks, err := client.GetSDKs(ctx)
+	if err != nil {
+		return client.SDK{}, errors.WithMessage(err, "could not fetch SDKs")
+	}
+	sdks = filterAndSortSDKs(sdks, semverConstraint)
+	if len(sdks) == 0 {
+		return client.SDK{}, errors.Errorf("no SDKs matched %q", semverConstraint.String())
+	}
+	return sdks[0], nil
 }

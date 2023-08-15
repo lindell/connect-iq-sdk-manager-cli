@@ -2,13 +2,11 @@ package manager
 
 import (
 	"context"
-	"io"
 	"os"
 	"path"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
-	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -64,16 +62,5 @@ func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device c
 	defer r.Close()
 
 	// Save the zip to a temporary file
-	f, err := os.CreateTemp(os.TempDir(), "device-*.zip")
-	if err != nil {
-		return errors.WithMessage(err, "could not create tmp device file")
-	}
-	defer os.Remove(f.Name())
-	defer f.Close()
-	if _, err := io.Copy(f, r); err != nil {
-		return err
-	}
-
-	log.Info("Extracting device zip")
-	return unzip(f.Name(), deviceDir)
+	return fetchAndExtract(r, deviceDir)
 }

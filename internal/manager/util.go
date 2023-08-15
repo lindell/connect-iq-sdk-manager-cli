@@ -6,6 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 func unzip(source, destination string) error {
@@ -55,4 +58,21 @@ func unzip(source, destination string) error {
 		}
 	}
 	return nil
+}
+
+func fetchAndExtract(r io.Reader, destination string) error {
+	// Save the zip to a temporary file
+	f, err := os.CreateTemp(os.TempDir(), "*.zip")
+	if err != nil {
+		return errors.WithMessage(err, "could not create tmp device file")
+	}
+	defer os.Remove(f.Name())
+	defer f.Close()
+	logrus.Debug("Downloading zip to temporary a location")
+	if _, err := io.Copy(f, r); err != nil {
+		return err
+	}
+
+	logrus.Debugf("Unzipping file to %q", destination)
+	return unzip(f.Name(), destination)
 }
