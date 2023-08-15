@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// SdkListCmd list devices
-func SdkListCmd() *cobra.Command {
+// SDKListCmd list devices
+func SDKListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list [version]",
 		Short: "List SDKs",
@@ -40,5 +40,5 @@ func listSdks(_ *cobra.Command, args []string) error {
 		}
 	}
 
-	return mngr.ListSdks(ctx, semverConstraint)
+	return mngr.ListSDKs(ctx, semverConstraint)
 }

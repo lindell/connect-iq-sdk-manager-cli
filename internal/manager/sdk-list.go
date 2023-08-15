@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (m *Manager) ListSdks(ctx context.Context, semverConstraint *semver.Constraints) error {
+func (m *Manager) ListSDKs(ctx context.Context, semverConstraint *semver.Constraints) error {
 	sdks, err := client.GetSDKs(ctx)
 	if err != nil {
 		return errors.WithMessage(err, "could not fetch SDKs")

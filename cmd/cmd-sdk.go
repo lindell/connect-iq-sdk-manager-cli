@@ -9,7 +9,8 @@ func SdkCmd() *cobra.Command {
 		Short: "Handle sdks",
 	}
 
-	cmd.AddCommand(SdkListCmd())
+	cmd.AddCommand(SDKListCmd())
+	cmd.AddCommand(SDKDownloadCmd())
 
 	return cmd
 }
