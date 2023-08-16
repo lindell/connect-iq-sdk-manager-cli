@@ -12,6 +12,7 @@ func SdkCmd() *cobra.Command {
 	cmd.AddCommand(SDKListCmd())
 	cmd.AddCommand(SDKDownloadCmd())
 	cmd.AddCommand(SDKSetCmd())
+	cmd.AddCommand(SDKCurrentPathCmd())
 
 	return cmd
 }
