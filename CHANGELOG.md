@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.4.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.3.1...v0.4.0) (2023-08-16)
+
+
+### Features
+
+* added "sdk list" command ([dacfc1a](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/dacfc1a398d9c32bbfe1f40c4930d710dc686a94))
+* added configurable logging ([c7171b9](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/c7171b9c975079f49958aa9ae0bc4cdc8168aca5))
+* added list device command and moved it and device download under ([0d1d42a](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/0d1d42a9cf252312735991ad777b603d5d7b02ee))
+* added sdk current-path command ([3bac92b](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/3bac92bab66be6ccc6127aadd3028634291498d1))
+* added sdk download command ([d79508b](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/d79508b057b2013b6644f83acc49ec7172c545e0))
+* added sdk set command ([41a737d](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/41a737db0510dd69961e37a167115914ce83bf0b))
+* handle token refresh ([#16](https://github.com/lindell/connect-iq-sdk-manager-cli/issues/16)) ([781b2f7](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/781b2f7634c81f45711517fc47a8069fe145f91b))
+* replaced asking for username and password with real oauth flow ([#18](https://github.com/lindell/connect-iq-sdk-manager-cli/issues/18)) ([5108950](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/51089500b035eff44848c729e47823a84c27f0c3))
+
+
+### Bug Fixes
+
+* don't log downloaded file contents ([2e64ff6](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/2e64ff6a5092a2da5ecaf01f39fd2d76661416e1))
+* improved error message when login fails ([fc55b2f](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/fc55b2f57e76b1fb2a6494aff5066ecae61cf54b)), closes [#2](https://github.com/lindell/connect-iq-sdk-manager-cli/issues/2)
+
 ## [0.3.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.3.0...v0.3.1) (2023-08-10)
 
 
