@@ -28,7 +28,7 @@ All configuration can be done through command line flags, configuration files or
 {{range .Commands}}
 {{if .YAMLExample}}
 <details>
-  <summary>All available {{.Name}} options</summary>
+  <summary>All available `{{.Name}}` options</summary>
 
 ```yaml
 {{ .YAMLExample }}
@@ -38,7 +38,7 @@ All configuration can be done through command line flags, configuration files or
 
 ## Usage
 {{range .Commands}}
-* [{{ .Name }}](#-usage-of-{{ .Name }}) {{ .Short }}{{end}}
+* [{{ .Name }}](#-usage-of-{{ .Path }}) {{ .Short }}{{end}}
 
 {{range .Commands}}
 ### Usage of `{{.Name}}`

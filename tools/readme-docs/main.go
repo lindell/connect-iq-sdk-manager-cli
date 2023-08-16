@@ -11,12 +11,16 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	"golang.org/x/exp/slices"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/cmd"
 )
 
 const templatePath = "./docs/README.template.md"
 const resultingPath = "./README.md"
+
+// These commands should not show up in the readme docs
+var bannedCommands = []string{"version"}
 
 type templateData struct {
 	MainUsage string
@@ -25,6 +29,7 @@ type templateData struct {
 
 type command struct {
 	Name        string
+	Path        string
 	Long        string
 	Short       string
 	Usage       string
@@ -37,23 +42,19 @@ func main() {
 	// Main usage
 	data.MainUsage = strings.TrimSpace(cmd.RootCmd().UsageString())
 
-	subCommands := cmd.RootCmd().Commands()
+	rootPath := cmd.RootCmd().CommandPath() + " "
 
 	// All commands
-	cmds := []struct {
-		cmd *cobra.Command
-	}{
-		{
-			cmd: commandByName(subCommands, "version"), // TODO: Update to real command
-		},
-	}
-	for _, c := range cmds {
+	cmds := viewableCommands(cmd.RootCmd())
+	for _, cmd := range cmds {
+		name := strings.TrimPrefix(cmd.CommandPath(), rootPath)
 		data.Commands = append(data.Commands, command{
-			Name:        c.cmd.Name(),
-			Long:        c.cmd.Long,
-			Short:       c.cmd.Short,
-			Usage:       strings.TrimSpace(c.cmd.UsageString()),
-			YAMLExample: getYAMLExample(c.cmd),
+			Name:        name,
+			Path:        strings.ReplaceAll(name, " ", "-"),
+			Long:        cmd.Long,
+			Short:       cmd.Short,
+			Usage:       strings.TrimSpace(cmd.UsageString()),
+			YAMLExample: getYAMLExample(cmd),
 		})
 	}
 
@@ -116,11 +117,16 @@ func getYAMLExample(cmd *cobra.Command) string {
 	return strings.TrimSpace(b.String())
 }
 
-func commandByName(cmds []*cobra.Command, name string) *cobra.Command {
-	for _, command := range cmds {
-		if command.Name() == name {
-			return command
-		}
+func viewableCommands(cmd *cobra.Command) []*cobra.Command {
+	cmds := []*cobra.Command{}
+
+	if cmd.Runnable() && !slices.Contains(bannedCommands, cmd.Name()) {
+		cmds = append(cmds, cmd)
 	}
-	panic(fmt.Sprintf(`could not find command "%s"`, name))
+
+	for _, command := range cmd.Commands() {
+		cmds = append(cmds, viewableCommands(command)...)
+	}
+
+	return cmds
 }
