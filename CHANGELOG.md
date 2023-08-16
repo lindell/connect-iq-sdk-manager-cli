@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.4.0...v0.5.0) (2023-08-16)
+
+
+### Features
+
+* added --bin flag to sdk current-path ([b349d48](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/b349d48b0c06cdb9cdab594da19bed8a5afbf90f))
+
 ## [0.4.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.3.1...v0.4.0) (2023-08-16)
 
 
