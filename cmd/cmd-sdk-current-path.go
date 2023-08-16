@@ -15,16 +15,20 @@ func SDKCurrentPathCmd() *cobra.Command {
 		RunE:  currentSDKPath,
 	}
 
+	cmd.Flags().BoolP("bin", "", false, "Print binary path")
+
 	return cmd
 }
 
-func currentSDKPath(_ *cobra.Command, _ []string) error {
+func currentSDKPath(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
+
+	bin, _ := cmd.Flags().GetBool("bin")
 
 	mngr, err := NewManager()
 	if err != nil {
 		return err
 	}
 
-	return mngr.CurrentSDKPath(ctx)
+	return mngr.CurrentSDKPath(ctx, bin)
 }

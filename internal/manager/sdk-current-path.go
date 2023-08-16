@@ -9,7 +9,7 @@ import (
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
 )
 
-func (m *Manager) CurrentSDKPath(ctx context.Context) error {
+func (m *Manager) CurrentSDKPath(ctx context.Context, binary bool) error {
 	garminRoot, err := connectiq.RootGarminFolder()
 	if err != nil {
 		return err
@@ -27,7 +27,12 @@ func (m *Manager) CurrentSDKPath(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	path := string(bb)
 
-	fmt.Printf("%s\n", bb)
+	if binary {
+		path = filepath.Join(path, "bin")
+	}
+
+	fmt.Printf("%s\n", path)
 	return nil
 }
