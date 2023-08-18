@@ -2,6 +2,8 @@ package manager
 
 import (
 	"archive/zip"
+	"crypto/md5"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -60,19 +62,27 @@ func unzip(source, destination string) error {
 	return nil
 }
 
-func fetchAndExtract(r io.Reader, destination string) error {
+func fetchAndExtract(r io.Reader, destination string) (md5sum string, err error) {
 	// Save the zip to a temporary file
 	f, err := os.CreateTemp(os.TempDir(), "*.zip")
 	if err != nil {
-		return errors.WithMessage(err, "could not create tmp device file")
+		return "", errors.WithMessage(err, "could not create tmp device file")
 	}
 	defer os.Remove(f.Name())
 	defer f.Close()
-	logrus.Debug("Downloading zip to temporary a location")
-	if _, err := io.Copy(f, r); err != nil {
-		return err
-	}
 
-	logrus.Debugf("Unzipping file to %q", destination)
-	return unzip(f.Name(), destination)
+	logrus.Debug("Downloading zip to temporary a location")
+	m := md5.New() //nolint:gosec
+	w := io.MultiWriter(f, m)
+	if _, err := io.Copy(w, r); err != nil {
+		return "", err
+	}
+	md5hash := fmt.Sprintf("%x", m.Sum(nil))
+
+	logrus.
+		WithField("hash", md5hash).
+		WithField("destination", destination).
+		Debugf("Unzipping file")
+
+	return md5hash, unzip(f.Name(), destination)
 }

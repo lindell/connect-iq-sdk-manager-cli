@@ -12,6 +12,7 @@ import (
 
 type DownloadConfig struct {
 	DeviceFilters DeviceFilters
+	IncludeFonts  bool
 }
 
 func (m *Manager) Download(ctx context.Context, config DownloadConfig) error {
@@ -30,11 +31,17 @@ func (m *Manager) Download(ctx context.Context, config DownloadConfig) error {
 		return err
 	}
 
-	log.Infof("Downloading %d devices.", len(deviceInfos))
+	log.Infof("Downloading %d devices", len(deviceInfos))
 
 	for _, device := range deviceInfos {
 		log := log.WithField("device", device.Name)
 		if err := m.fetchDevice(ctx, log, device); err != nil {
+			return err
+		}
+	}
+
+	if config.IncludeFonts {
+		if err := m.downloadFonts(ctx, deviceInfos); err != nil {
 			return err
 		}
 	}
@@ -61,6 +68,6 @@ func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device c
 	}
 	defer r.Close()
 
-	// Save the zip to a temporary file
-	return fetchAndExtract(r, deviceDir)
+	_, err = fetchAndExtract(r, deviceDir)
+	return err
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/pkg/errors"
 )
@@ -28,4 +29,17 @@ func expectStatusCode(resp *http.Response, status ...int) error {
 	}
 
 	return errors.Errorf("%s: %s", errorResp.Error, errorResp.Message)
+}
+
+func urlMustParse(s string) *url.URL {
+	u, err := url.Parse(s)
+	if err != nil {
+		panic(err)
+	}
+	return u
+}
+
+func cloneURL(u *url.URL) *url.URL {
+	u2 := *u
+	return &u2
 }

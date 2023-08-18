@@ -17,11 +17,15 @@ func DeviceDownloadCmd() *cobra.Command {
 		RunE:  download,
 	}
 
+	cmd.Flags().BoolP("include-fonts", "F", false, "Download the fonts used for simulating the downloaded devices.")
+
 	return cmd
 }
 
 func download(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
+
+	includeFonts, _ := cmd.Flags().GetBool("include-fonts")
 
 	mngr, err := NewManager()
 	if err != nil {
@@ -35,5 +39,6 @@ func download(cmd *cobra.Command, _ []string) error {
 
 	return mngr.Download(ctx, manager.DownloadConfig{
 		DeviceFilters: deviceFilters,
+		IncludeFonts:  includeFonts,
 	})
 }
