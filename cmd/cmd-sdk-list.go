@@ -24,19 +24,16 @@ For example: ^6.2.0 or >=4.0.0`,
 	return cmd
 }
 
-func listSdks(_ *cobra.Command, args []string) error {
+func listSdks(_ *cobra.Command, args []string) (err error) {
 	ctx := context.Background()
 
-	mngr, err := NewManager()
-	if err != nil {
-		return err
-	}
+	mngr := NewManager()
 
 	semverConstraint, _ := semver.NewConstraint("*")
 	if len(args) > 0 {
 		semverConstraint, err = semver.NewConstraint(args[0])
 		if err != nil {
-			return errors.WithMessage(err, "could not parse version contraint")
+			return errors.WithMessage(err, "could not parse version constraint")
 		}
 	}
 

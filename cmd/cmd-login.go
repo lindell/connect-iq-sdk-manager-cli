@@ -35,22 +35,19 @@ func login(cmd *cobra.Command, _ []string) error {
 
 	username, password := getLoginCredentials(flag)
 
-	manager, err := NewManager()
-	if err != nil {
-		return err
-	}
+	manager := NewManager()
 
 	ctx := context.Background()
 
 	if username != "" && password != "" {
 		log.Debug("Using credentials to simulate oauth login")
-		err = manager.LoginWithCredentials(ctx, username, password)
+		err := manager.LoginWithCredentials(ctx, username, password)
 		if err != nil {
 			return err
 		}
 	} else {
 		log.Debug("Using Oauth flow to login")
-		err = manager.LoginWithOauth(ctx)
+		err := manager.LoginWithOauth(ctx)
 		if err != nil {
 			return err
 		}

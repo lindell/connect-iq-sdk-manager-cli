@@ -17,15 +17,10 @@ var (
 	ErrTokenNotFound error = errors.New("token not found")
 )
 
-func NewStore() (*Store, error) {
-	path, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return nil, err
-	}
-
+func NewStore() *Store {
 	return &Store{
-		rootPath: path,
-	}, nil
+		rootPath: connectiq.RootPath,
+	}
 }
 
 var tokenFilename = "token.json"

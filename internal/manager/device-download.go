@@ -50,11 +50,7 @@ func (m *Manager) Download(ctx context.Context, config DownloadConfig) error {
 }
 
 func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device client.DeviceInfo) error {
-	rootFolder, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return err
-	}
-	deviceDir := path.Join(rootFolder, "Devices", device.Name)
+	deviceDir := path.Join(connectiq.DevicesPath, device.Name)
 
 	if _, err := os.Stat(deviceDir); !os.IsNotExist(err) {
 		log.Info("Device folder already exist")

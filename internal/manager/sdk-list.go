@@ -47,12 +47,7 @@ func sdkToRow(device client.SDK, installedSDKs mapset.Set[string]) []string {
 }
 
 func installedSDKs() (mapset.Set[string], error) {
-	sdksFolder, err := connectiq.SDKsFolder()
-	if err != nil {
-		return nil, err
-	}
-
-	entries, err := os.ReadDir(sdksFolder)
+	entries, err := os.ReadDir(connectiq.SDKsPath)
 	if err != nil {
 		return nil, errors.WithMessage(err, "could not read sdks folder")
 	}

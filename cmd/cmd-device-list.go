@@ -22,10 +22,7 @@ func DeviceListCmd() *cobra.Command {
 func listDevices(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
 
-	mngr, err := NewManager()
-	if err != nil {
-		return err
-	}
+	mngr := NewManager()
 
 	deviceFilters, err := getDeviceFilters(cmd)
 	if err != nil {

@@ -26,10 +26,7 @@ func SDKSetCmd() *cobra.Command {
 func setSDK(_ *cobra.Command, args []string) error {
 	ctx := context.Background()
 
-	mngr, err := NewManager()
-	if err != nil {
-		return err
-	}
+	mngr := NewManager()
 
 	semverConstraint, err := semver.NewConstraint(args[0])
 	if err != nil {

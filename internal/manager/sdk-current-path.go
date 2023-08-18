@@ -10,20 +10,14 @@ import (
 )
 
 func (m *Manager) CurrentSDKPath(_ context.Context, binary bool) error {
-	garminRoot, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return err
-	}
-	currentSDKFilePath := filepath.Join(garminRoot, "current-sdk.cfg")
-
-	if _, err := os.Stat(currentSDKFilePath); os.IsNotExist(err) {
+	if _, err := os.Stat(connectiq.CurrentSDKPath); os.IsNotExist(err) {
 		fmt.Println("No SDK set as current")
 		return nil
 	} else if err != nil {
 		return err
 	}
 
-	bb, err := os.ReadFile(currentSDKFilePath)
+	bb, err := os.ReadFile(connectiq.CurrentSDKPath)
 	if err != nil {
 		return err
 	}

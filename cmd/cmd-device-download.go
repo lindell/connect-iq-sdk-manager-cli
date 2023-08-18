@@ -27,10 +27,7 @@ func download(cmd *cobra.Command, _ []string) error {
 
 	includeFonts, _ := cmd.Flags().GetBool("include-fonts")
 
-	mngr, err := NewManager()
-	if err != nil {
-		return err
-	}
+	mngr := NewManager()
 
 	deviceFilters, err := getDeviceFilters(cmd)
 	if err != nil {

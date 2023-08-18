@@ -31,13 +31,7 @@ func (m *Manager) SetSDK(ctx context.Context, semverConstraint *semver.Constrain
 		}
 	}
 
-	garminRoot, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return err
-	}
-	currentSDKFilePath := filepath.Join(garminRoot, "current-sdk.cfg")
-
-	if err := os.WriteFile(currentSDKFilePath, []byte(sdkDir+string(filepath.Separator)), 0644); err != nil { //nolint: gosec
+	if err := os.WriteFile(connectiq.CurrentSDKPath, []byte(sdkDir+string(filepath.Separator)), 0644); err != nil { //nolint: gosec
 		return errors.WithMessage(err, "could not write to current sdk file")
 	}
 

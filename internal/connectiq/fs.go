@@ -1,16 +1,31 @@
 package connectiq
 
 import (
+	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 	"runtime"
 
 	"github.com/pkg/errors"
 )
 
+func init() {
+	if _, err := rootGarminFolder(); err != nil {
+		fmt.Fprintf(os.Stderr, "could not find Garmin folder: %s", err)
+		os.Exit(1)
+	}
+}
+
+var RootPath, _ = rootGarminFolder()
+var SDKsPath = filepath.Join(RootPath, "Sdks")
+var FontsPath = filepath.Join(RootPath, "Fonts")
+var DevicesPath = filepath.Join(RootPath, "Devices")
+var CurrentSDKPath = filepath.Join(RootPath, "current-sdk.cfg")
+
 // Get the folder where Garmin information is stored
-func RootGarminFolder() (string, error) {
+func rootGarminFolder() (string, error) {
 	if runtime.GOOS == "windows" {
 		appDataFolder := os.Getenv("APPDATA")
 		if appDataFolder == "" {
@@ -24,14 +39,6 @@ func RootGarminFolder() (string, error) {
 		return "", errors.WithMessage(err, "could not get the home directory")
 	}
 	return path.Join(homeDir, ".Garmin", "ConnectIQ"), nil
-}
-
-func SDKsFolder() (string, error) {
-	root, err := RootGarminFolder()
-	if err != nil {
-		return "", errors.WithMessage(err, "could not find sdks folder")
-	}
-	return path.Join(root, "Sdks"), nil
 }
 
 var sdkVersionRegexp = regexp.MustCompile(`^connectiq-sdk-\w+-([\d.]+)-`)

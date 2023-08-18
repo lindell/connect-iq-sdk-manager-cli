@@ -47,12 +47,6 @@ func (m *Manager) downloadFonts(ctx context.Context, deviceInfos []client.Device
 }
 
 func (m *Manager) fetchFont(ctx context.Context, log log.FieldLogger, font string) error {
-	rootFolder, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return err
-	}
-	fontsDir := filepath.Join(rootFolder, "Fonts")
-
 	log.Info("Downloading font zip")
 	r, err := client.DownloadFont(ctx, font)
 	if err != nil {
@@ -60,7 +54,7 @@ func (m *Manager) fetchFont(ctx context.Context, log log.FieldLogger, font strin
 	}
 	defer r.Close()
 
-	md5hash, err := fetchAndExtract(r, fontsDir)
+	md5hash, err := fetchAndExtract(r, connectiq.FontsPath)
 	if err != nil {
 		return err
 	}
@@ -68,7 +62,7 @@ func (m *Manager) fetchFont(ctx context.Context, log log.FieldLogger, font strin
 	// The GUI sdk manager saves a file containing the md5 hash of the downloaded (zip) file.
 	// It is unclear what it is for, since it does not seem to check this with a HEAD request or similar.
 	// But to keep compatibility we will also save this file.
-	hashFile := filepath.Join(fontsDir, font+".md5")
+	hashFile := filepath.Join(connectiq.FontsPath, font+".md5")
 	if err := os.WriteFile(hashFile, []byte(md5hash), 0644); err != nil { //nolint:gosec
 		return errors.WithMessage(err, "could not write md5 hash to file")
 	}
@@ -78,15 +72,9 @@ func (m *Manager) fetchFont(ctx context.Context, log log.FieldLogger, font strin
 
 // installedFonts returns a list of all installed fonts
 func installedFonts() (mapset.Set[string], error) {
-	rootFolder, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return nil, err
-	}
-	fontsDir := filepath.Join(rootFolder, "Fonts")
-
-	entries, err := os.ReadDir(fontsDir)
+	entries, err := os.ReadDir(connectiq.FontsPath)
 	if os.IsNotExist(err) {
-		return mapset.NewSet[string](), os.Mkdir(fontsDir, 0755)
+		return mapset.NewSet[string](), os.Mkdir(connectiq.FontsPath, 0755)
 	} else if err != nil {
 		return nil, errors.WithMessage(err, "could not read fonts")
 	}
@@ -113,11 +101,7 @@ func fontsFromDevices(devices []client.DeviceInfo) ([]string, error) {
 }
 
 func fontsFromDevice(device client.DeviceInfo) ([]string, error) {
-	rootPath, err := connectiq.RootGarminFolder()
-	if err != nil {
-		return nil, err
-	}
-	simPath := filepath.Join(rootPath, "Devices", device.Name, "simulator.json")
+	simPath := filepath.Join(connectiq.DevicesPath, device.Name, "simulator.json")
 
 	bb, err := os.ReadFile(simPath)
 	if err != nil {

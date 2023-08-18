@@ -51,16 +51,12 @@ func downloadSDK(ctx context.Context, sdk client.SDK) error {
 }
 
 func sdkPath(sdk client.SDK) (string, error) {
-	sdksFolder, err := connectiq.SDKsFolder()
-	if err != nil {
-		return "", err
-	}
 	filename, err := sdk.Filename()
 	if err != nil {
 		return "", err
 	}
 
-	return path.Join(sdksFolder, strings.TrimSuffix(filename, ".zip")), nil
+	return path.Join(connectiq.SDKsPath, strings.TrimSuffix(filename, ".zip")), nil
 }
 
 func latestMatchingSDK(ctx context.Context, semverConstraint *semver.Constraints) (client.SDK, error) {

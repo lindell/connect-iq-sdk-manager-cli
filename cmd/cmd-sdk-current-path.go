@@ -25,10 +25,7 @@ func currentSDKPath(cmd *cobra.Command, _ []string) error {
 
 	bin, _ := cmd.Flags().GetBool("bin")
 
-	mngr, err := NewManager()
-	if err != nil {
-		return err
-	}
+	mngr := NewManager()
 
 	return mngr.CurrentSDKPath(ctx, bin)
 }

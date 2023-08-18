@@ -8,15 +8,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-func NewManager() (manager.Manager, error) {
-	store, err := storage.NewStore()
-	if err != nil {
-		return manager.Manager{}, err
-	}
+func NewManager() manager.Manager {
+	store := storage.NewStore()
 
 	return manager.Manager{
 		Store: store,
-	}, nil
+	}
 }
 
 func checkExlusivity(options map[string]bool) error {
