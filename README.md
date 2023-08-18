@@ -2,7 +2,7 @@
   connect-iq-sdk-manager
 </h1>
 
-connect-iq-sdk-manager handles and downloads SDKs and other resources connected to ConnectIQ development. It aims to have parity with the official GUI sdk manager. 
+connect-iq-sdk-manager handles and downloads SDKs and other resources connected to ConnectIQ development. It aims to have parity with the official GUI sdk manager, but have some additional features such as only downloading devices from a specified manifest file.
 
 ## Install
 
@@ -14,6 +14,16 @@ brew install lindell/connect-iq-sdk-manager-cli/connect-iq-sdk-manager
 
 ### Manual binary install
 Find the binary for your operating system from the [release page](https://github.com/lindell/connect-iq-sdk-manager-cli/releases) and download it.
+
+### Automatic binary install
+To automatically install the latest version
+```bash
+curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh
+```
+Or a specific version.
+```bash
+curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh -s -- -d vX.X.X
+````
 
 ### From source
 You can also install from source with `go install`, this is not recommended for most cases.
@@ -28,7 +38,135 @@ All configuration can be done through command line flags, configuration files or
 
 
 <details>
-  <summary>All available version options</summary>
+  <summary>All available `device download` options</summary>
+
+```yaml
+# The device(s) that should be used.
+device:
+  - example
+
+# Path to the manifest file.
+download-all: false
+
+# Download the fonts used for simulating the downloaded devices.
+include-fonts: false
+
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+
+# Path to the manifest file.
+manifest:
+```
+</details>
+
+
+<details>
+  <summary>All available `device list` options</summary>
+
+```yaml
+# The device(s) that should be used.
+device:
+  - example
+
+# Path to the manifest file.
+download-all: false
+
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+
+# Path to the manifest file.
+manifest:
+```
+</details>
+
+
+<details>
+  <summary>All available `login` options</summary>
+
+```yaml
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+
+# The Garmin password.
+password:
+
+# The Garmin username.
+username:
+```
+</details>
+
+
+<details>
+  <summary>All available `sdk current-path` options</summary>
+
+```yaml
+# Print binary path
+bin: false
+
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+```
+</details>
+
+
+<details>
+  <summary>All available `sdk download` options</summary>
+
+```yaml
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+```
+</details>
+
+
+<details>
+  <summary>All available `sdk list` options</summary>
+
+```yaml
+# The file where all logs should be printed to. "-" means stdout.
+log-file: "-"
+
+# The formatting of the logs. Available values: text, json, json-pretty.
+log-format: text
+
+# The level of logging that should be made. Available values: trace, debug, info, error.
+log-level: info
+```
+</details>
+
+
+<details>
+  <summary>All available `sdk set` options</summary>
 
 ```yaml
 # The file where all logs should be printed to. "-" means stdout.
@@ -45,14 +183,137 @@ log-level: info
 
 ## Usage
 
-* [version](#-usage-of-version) Get the version of connect-iq-sdk-manager.
+* [device download](#-usage-of-device-download) Download devices.
+* [device list](#-usage-of-device-list) List devices.
+* [login](#-usage-of-login) Login to be able to use some parts of the manager.
+* [sdk current-path](#-usage-of-sdk-current-path) Print the path to the currently active SDK
+* [sdk download](#-usage-of-sdk-download) Download an SDK. Without setting it as the current one.
+* [sdk list](#-usage-of-sdk-list) List SDKs.
+* [sdk set](#-usage-of-sdk-set) Set which SDK version to be used.
 
 
-### Usage of `version`
-Get the version of connect-iq-sdk-manager.
+### Usage of `device download`
+Download devices.
+
+Either all devices can be chosen, all devices defined in a manifest file, or a list of devices.
 ```
 Usage:
-  connect-iq-sdk-manager version [flags]
+  connect-iq-sdk-manager device download [flags]
+
+Flags:
+  -F, --include-fonts   Download the fonts used for simulating the downloaded devices.
+
+Global Flags:
+      --config string       Path of the config file.
+  -d, --device strings      The device(s) that should be used.
+      --download-all        Path to the manifest file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
+  -m, --manifest string     Path to the manifest file.
+```
+
+
+### Usage of `device list`
+List devices.
+
+Either all devices can be chosen, all devices defined in a manifest file, or a list of devices.
+```
+Usage:
+  connect-iq-sdk-manager device list [flags]
+
+Global Flags:
+      --config string       Path of the config file.
+  -d, --device strings      The device(s) that should be used.
+      --download-all        Path to the manifest file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
+  -m, --manifest string     Path to the manifest file.
+```
+
+
+### Usage of `login`
+Login to be able to use some parts of the manager.
+
+If used as is, you will be asked to login via the Garmin SSO OAuth flow.
+Credentials can also be set via the --username and --password config,
+or GARMIN_USERNAME and GARMIN_PASSWORD environment variables.
+```
+Usage:
+  connect-iq-sdk-manager login [flags]
+
+Flags:
+      --password string   The Garmin password.
+      --username string   The Garmin username.
+
+Global Flags:
+      --config string       Path of the config file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
+```
+
+
+### Usage of `sdk current-path`
+
+```
+Usage:
+  connect-iq-sdk-manager sdk current-path [flags]
+
+Flags:
+      --bin   Print binary path
+
+Global Flags:
+      --config string       Path of the config file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
+```
+
+
+### Usage of `sdk download`
+Download an SDK. Without setting it as the current one.
+
+The version argument can be a specific version or a semver-range.
+For example: ^6.2.0 or >=4.0.0 or 4.2.1
+```
+Usage:
+  connect-iq-sdk-manager sdk download version [flags]
+
+Global Flags:
+      --config string       Path of the config file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
+```
+
+
+### Usage of `sdk list`
+List SDKs.
+
+To only list certain versions. The version argument can be used with a semver-range.
+For example: ^6.2.0 or >=4.0.0
+```
+Usage:
+  connect-iq-sdk-manager sdk list [version] [flags]
+
+Global Flags:
+      --config string       Path of the config file.
+      --log-file string     The file where all logs should be printed to. "-" means stdout. (default "-")
+      --log-format string   The formatting of the logs. Available values: text, json, json-pretty. (default "text")
+  -L, --log-level string    The level of logging that should be made. Available values: trace, debug, info, error. (default "info")
+```
+
+
+### Usage of `sdk set`
+Set which SDK version to be used. If it does not exist, it will be downloaded.
+
+The version argument can be a specific version or a semver-range.
+For example: ^6.2.0 or >=4.0.0 or 4.2.1
+```
+Usage:
+  connect-iq-sdk-manager sdk set version [flags]
 
 Global Flags:
       --config string       Path of the config file.
