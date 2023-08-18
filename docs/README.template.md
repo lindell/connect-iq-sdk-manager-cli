@@ -2,7 +2,7 @@
   connect-iq-sdk-manager
 </h1>
 
-connect-iq-sdk-manager handles and downloads SDKs and other resources connected to ConnectIQ development. It aims to have parity with the official GUI sdk manager. 
+connect-iq-sdk-manager handles and downloads SDKs and other resources connected to ConnectIQ development. It aims to have parity with the official GUI sdk manager, but have some additional features such as only downloading devices from a specified manifest file.
 
 ## Install
 
@@ -14,6 +14,16 @@ brew install lindell/connect-iq-sdk-manager-cli/connect-iq-sdk-manager
 
 ### Manual binary install
 Find the binary for your operating system from the [release page](https://github.com/lindell/connect-iq-sdk-manager-cli/releases) and download it.
+
+### Automatic binary install
+To automatically install the latest version
+```bash
+curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh
+```
+Or a specific version.
+```bash
+curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh -s -- -d vX.X.X
+````
 
 ### From source
 You can also install from source with `go install`, this is not recommended for most cases.
@@ -28,7 +38,7 @@ All configuration can be done through command line flags, configuration files or
 {{range .Commands}}
 {{if .YAMLExample}}
 <details>
-  <summary>All available {{.Name}} options</summary>
+  <summary>All available `{{.Name}}` options</summary>
 
 ```yaml
 {{ .YAMLExample }}
@@ -38,7 +48,7 @@ All configuration can be done through command line flags, configuration files or
 
 ## Usage
 {{range .Commands}}
-* [{{ .Name }}](#-usage-of-{{ .Name }}) {{ .Short }}{{end}}
+* [{{ .Name }}](#-usage-of-{{ .Path }}) {{ .Short }}{{end}}
 
 {{range .Commands}}
 ### Usage of `{{.Name}}`
