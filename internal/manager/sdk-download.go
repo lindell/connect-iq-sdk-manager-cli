@@ -46,7 +46,8 @@ func downloadSDK(ctx context.Context, sdk client.SDK) error {
 		return err
 	}
 
-	return fetchAndExtract(r, sdkDir)
+	_, err = fetchAndExtract(r, sdkDir)
+	return err
 }
 
 func sdkPath(sdk client.SDK) (string, error) {

@@ -9,7 +9,7 @@ import (
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
 )
 
-func (m *Manager) CurrentSDKPath(ctx context.Context, binary bool) error {
+func (m *Manager) CurrentSDKPath(_ context.Context, binary bool) error {
 	garminRoot, err := connectiq.RootGarminFolder()
 	if err != nil {
 		return err
