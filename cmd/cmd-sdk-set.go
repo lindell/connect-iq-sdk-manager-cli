@@ -12,8 +12,8 @@ import (
 func SDKSetCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "set version",
-		Short: "Set which SDK to be used",
-		Long: `Set which SDK to be used. If it does not exist, it will be downloaded
+		Short: "Set which SDK version to be used.",
+		Long: `Set which SDK version to be used. If it does not exist, it will be downloaded.
 
 ` + versionDesc,
 		Args: cobra.ExactArgs(1),
@@ -30,7 +30,7 @@ func setSDK(_ *cobra.Command, args []string) error {
 
 	semverConstraint, err := semver.NewConstraint(args[0])
 	if err != nil {
-		return errors.WithMessage(err, "could not parse version contraint")
+		return errors.WithMessage(err, "could not parse version constraint")
 	}
 
 	return mngr.SetSDK(ctx, semverConstraint)

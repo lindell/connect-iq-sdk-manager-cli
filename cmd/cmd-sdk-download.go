@@ -15,8 +15,8 @@ For example: ^6.2.0 or >=4.0.0 or 4.2.1`
 func SDKDownloadCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "download version",
-		Short: "Download SDK",
-		Long: `Download SDK.
+		Short: "Download an SDK. Without setting it as the current one.",
+		Long: `Download an SDK. Without setting it as the current one.
 
 ` + versionDesc,
 		Args: cobra.ExactArgs(1),

@@ -16,7 +16,7 @@ func NewManager() manager.Manager {
 	}
 }
 
-func checkExlusivity(options map[string]bool) error {
+func checkExclusivity(options map[string]bool) error {
 	enabledOptions := []string{}
 	for name, val := range options {
 		if val {

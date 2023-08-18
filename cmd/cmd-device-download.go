@@ -11,8 +11,8 @@ import (
 func DeviceDownloadCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "download",
-		Short: "Download resources.",
-		Long:  "Download resources.",
+		Short: "Download devices.",
+		Long:  "Download devices.\n\n" + deviceFilterDescription,
 		Args:  cobra.NoArgs,
 		RunE:  download,
 	}

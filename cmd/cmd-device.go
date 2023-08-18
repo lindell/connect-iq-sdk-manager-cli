@@ -6,7 +6,7 @@ import "github.com/spf13/cobra"
 func DeviceCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "device",
-		Short: "Handle devices",
+		Short: "Handle devices.",
 	}
 
 	cmd.AddCommand(DeviceListCmd())

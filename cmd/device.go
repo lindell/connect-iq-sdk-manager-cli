@@ -19,12 +19,14 @@ func configureDeviceCmd(cmd *cobra.Command) {
 	flags.BoolP("download-all", "", false, "Path to the manifest file.")
 }
 
+const deviceFilterDescription = `Either all devices can be chosen, all devices defined in a manifest file, or a list of devices.`
+
 func getDeviceFilters(cmd *cobra.Command) (manager.DeviceFilters, error) {
 	devices, _ := cmd.Flags().GetStringSlice("device")
 	manifest, _ := cmd.Flags().GetString("manifest")
 	downloadAll, _ := cmd.Flags().GetBool("download-all")
 
-	err := checkExlusivity(map[string]bool{
+	err := checkExclusivity(map[string]bool{
 		"devices":      len(devices) > 0,
 		"manifest":     manifest != "",
 		"download-all": downloadAll,

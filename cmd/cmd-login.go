@@ -15,11 +15,12 @@ import (
 func LoginCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Login the user to the Garmin.",
-		Long: `Login the user to the Garmin.
-The credentials can either be set via the --username and --password config,
-via GARMIN_USERNAME and GARMIN_PASSWORD environment variables,
-or be inputed interactively.`,
+		Short: "Login to be able to use some parts of the manager.",
+		Long: `Login to be able to use some parts of the manager.
+
+If used as is, you will be asked to login via the Garmin SSO OAuth flow.
+Credentials can also be set via the --username and --password config,
+or GARMIN_USERNAME and GARMIN_PASSWORD environment variables.`,
 		Args: cobra.NoArgs,
 		RunE: login,
 	}

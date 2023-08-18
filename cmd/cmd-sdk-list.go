@@ -12,7 +12,7 @@ import (
 func SDKListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list [version]",
-		Short: "List SDKs",
+		Short: "List SDKs.",
 		Long: `List SDKs.
 
 To only list certain versions. The version argument can be used with a semver-range.

@@ -11,7 +11,8 @@ import (
 func DeviceListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "List devices",
+		Short: "List devices.",
+		Long:  "List devices.\n\n" + deviceFilterDescription,
 		Args:  cobra.NoArgs,
 		RunE:  listDevices,
 	}
