@@ -4,6 +4,17 @@
 
 connect-iq-sdk-manager handles and downloads SDKs and other resources connected to ConnectIQ development. It aims to have parity with the official GUI sdk manager, but have some additional features such as only downloading devices from a specified manifest file.
 
+## How to use
+
+```bash
+connect-iq-sdk-manager login
+connect-iq-sdk-manager sdk set 6.2.2 # Downloads as sets the sdk as the current one
+export PATH=`connect-iq-sdk-manager sdk current-path --bin`:$PATH # Make the SDK binaries can be callable
+connect-iq-sdk-manager device download --manifest=your-app/manifest.xml # Download the devices used in your project
+# You can now use the SDK to build your project. Here we build an IQ file.
+monkeyc -f your-app/monkey.jungle -w -e -o output.iq
+```
+
 ## Install
 
 ### Homebrew
