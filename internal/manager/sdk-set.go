@@ -31,9 +31,12 @@ func (m *Manager) SetSDK(ctx context.Context, semverConstraint *semver.Constrain
 		}
 	}
 
-	if err := os.WriteFile(connectiq.CurrentSDKPath, []byte(sdkDir+string(filepath.Separator)), 0644); err != nil { //nolint: gosec
+	// The GUI stores the file with a trailing slash/backslash
+	sdkDir += string(filepath.Separator)
+
+	if err := os.WriteFile(connectiq.CurrentSDKPath, []byte(sdkDir), 0644); err != nil { //nolint: gosec
 		return errors.WithMessage(err, "could not write to current sdk file")
 	}
 
-	return nil
+	return connectiq.StoreConfigKeyVal("current-sdk", sdkDir)
 }

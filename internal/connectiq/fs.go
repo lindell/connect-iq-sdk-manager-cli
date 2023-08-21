@@ -23,6 +23,7 @@ var SDKsPath = filepath.Join(RootPath, "Sdks")
 var FontsPath = filepath.Join(RootPath, "Fonts")
 var DevicesPath = filepath.Join(RootPath, "Devices")
 var CurrentSDKPath = filepath.Join(RootPath, "current-sdk.cfg")
+var ConfigPath = filepath.Join(RootPath, "sdkmanager-config.ini")
 
 // Get the folder where Garmin information is stored
 func rootGarminFolder() (string, error) {
