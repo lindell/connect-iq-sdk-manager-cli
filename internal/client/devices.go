@@ -7,29 +7,26 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
 	"github.com/pkg/errors"
 )
 
 type DeviceInfo struct {
-	DeviceUUID            string `json:"deviceUuid"`
-	PartNumber            string `json:"partNumber"`
-	Name                  string `json:"name"`
-	ProductInfoFileExists bool   `json:"productInfoFileExists"`
-	CiqInfoFileExists     bool   `json:"ciqInfoFileExists"`
-	Upcoming              bool   `json:"upcoming"`
-	ProductInfoHash       string `json:"productInfoHash"`
-	CiqInfoHash           string `json:"ciqInfoHash"`
-	Group                 string `json:"group"`
-	DisplayName           string `json:"displayName"`
-	LastUpdateTime        string `json:"lastUpdateTime"`
-	Hidden                bool   `json:"hidden"`
-	Faceit2Capable        bool   `json:"faceit2Capable"`
+	DeviceUUID            string             `json:"deviceUuid"`
+	PartNumber            string             `json:"partNumber"`
+	Name                  string             `json:"name"`
+	ProductInfoFileExists bool               `json:"productInfoFileExists"`
+	CiqInfoFileExists     bool               `json:"ciqInfoFileExists"`
+	Upcoming              bool               `json:"upcoming"`
+	ProductInfoHash       string             `json:"productInfoHash"`
+	CiqInfoHash           string             `json:"ciqInfoHash"`
+	Group                 string             `json:"group"`
+	DisplayName           string             `json:"displayName"`
+	LastUpdateTime        connectiq.DateTime `json:"lastUpdateTime"`
+	Hidden                bool               `json:"hidden"`
+	Faceit2Capable        bool               `json:"faceit2Capable"`
 }
-
-var timestampLayout = "2006-01-02 15:04:05"
 
 var devicesURL = "https://api.gcs.garmin.com/ciq-product-onboarding/devices?sdkManagerVersion=1.0.5"
 var deviceDownloadURL = "https://api.gcs.garmin.com/ciq-product-onboarding/devices/%s/ciqInfo" // %s is partNumber
@@ -74,15 +71,8 @@ func removeDuplicateDevices(devices []DeviceInfo) ([]DeviceInfo, error) {
 		if existingDevice, exist := deviceMap[device.Name]; !exist {
 			deviceMap[device.Name] = device
 		} else {
-			existingTime, err := time.Parse(timestampLayout, existingDevice.LastUpdateTime)
-			if err != nil {
-				return nil, errors.WithMessage(err, "could not parse device last updated time")
-			}
-
-			newTime, err := time.Parse(timestampLayout, device.LastUpdateTime)
-			if err != nil {
-				return nil, errors.WithMessage(err, "could not parse device last updated time")
-			}
+			existingTime := existingDevice.LastUpdateTime.Time()
+			newTime := device.LastUpdateTime.Time()
 
 			if newTime.After(existingTime) {
 				deviceMap[device.Name] = device
