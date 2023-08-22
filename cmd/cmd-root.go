@@ -23,6 +23,7 @@ func RootCmd() *cobra.Command {
 	cmd.AddCommand(LoginCmd())
 	cmd.AddCommand(DeviceCmd())
 	cmd.AddCommand(SdkCmd())
+	cmd.AddCommand(AgreementCmd())
 
 	configureConfig(cmd)
 	configureLogging(cmd)

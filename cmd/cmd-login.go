@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/manager"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -32,23 +33,25 @@ or GARMIN_USERNAME and GARMIN_PASSWORD environment variables.`,
 }
 
 func login(cmd *cobra.Command, _ []string) error {
-	flag := cmd.Flags()
-
-	username, password := getLoginCredentials(flag)
-
-	manager := NewManager()
-
 	ctx := context.Background()
+	mngr, ctx, err := manager.NewManager(ctx, manager.Config{
+		SkipLoginRequired: true,
+	})
+	if err != nil {
+		return err
+	}
+
+	username, password := getLoginCredentials(cmd.Flags())
 
 	if username != "" && password != "" {
 		log.Debug("Using credentials to simulate oauth login")
-		err := manager.LoginWithCredentials(ctx, username, password)
+		err := mngr.LoginWithCredentials(ctx, username, password)
 		if err != nil {
 			return err
 		}
 	} else {
 		log.Debug("Using Oauth flow to login")
-		err := manager.LoginWithOauth(ctx)
+		err := mngr.LoginWithOauth(ctx)
 		if err != nil {
 			return err
 		}
