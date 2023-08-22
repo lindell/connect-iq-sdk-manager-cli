@@ -62,7 +62,7 @@ curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/mas
 Or a specific version.
 ```bash
 curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh -s -- -d vX.X.X
-````
+```
 
 ### From source
 You can also install from source with `go install`, this is not recommended for most cases.
@@ -257,15 +257,15 @@ log-level: info
 
 ## Usage
 
-* [agreement accept](#-usage-of-agreement-accept) Accept the SDK agreement.
-* [agreement view](#-usage-of-agreement-view) View the SDK agreement.
-* [device download](#-usage-of-device-download) Download devices.
-* [device list](#-usage-of-device-list) List devices.
-* [login](#-usage-of-login) Login to be able to use some parts of the manager.
-* [sdk current-path](#-usage-of-sdk-current-path) Print the path to the currently active SDK
-* [sdk download](#-usage-of-sdk-download) Download an SDK. Without setting it as the current one.
-* [sdk list](#-usage-of-sdk-list) List SDKs.
-* [sdk set](#-usage-of-sdk-set) Set which SDK version to be used.
+* [agreement accept](#usage-of-agreement-accept) Accept the SDK agreement.
+* [agreement view](#usage-of-agreement-view) View the SDK agreement.
+* [device download](#usage-of-device-download) Download devices.
+* [device list](#usage-of-device-list) List devices.
+* [login](#usage-of-login) Login to be able to use some parts of the manager.
+* [sdk current-path](#usage-of-sdk-current-path) Print the path to the currently active SDK
+* [sdk download](#usage-of-sdk-download) Download an SDK. Without setting it as the current one.
+* [sdk list](#usage-of-sdk-list) List SDKs.
+* [sdk set](#usage-of-sdk-set) Set which SDK version to be used.
 
 
 ### Usage of `agreement accept`
