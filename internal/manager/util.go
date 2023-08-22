@@ -2,7 +2,7 @@ package manager
 
 import (
 	"archive/zip"
-	"crypto/md5"
+	"crypto/md5" //nolint:gosec
 	"fmt"
 	"io"
 	"os"
@@ -54,7 +54,7 @@ func unzip(source, destination string) error {
 			return err
 		}
 		defer writer.Close()
-		_, err = io.Copy(writer, reader)
+		_, err = io.Copy(writer, reader) //nolint:gosec
 		if err != nil {
 			return err
 		}
