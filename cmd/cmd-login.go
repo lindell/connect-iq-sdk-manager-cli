@@ -34,7 +34,7 @@ or GARMIN_USERNAME and GARMIN_PASSWORD environment variables.`,
 
 func login(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
-	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{
+	mngr, ctx, err := manager.NewManager(ctx, manager.Config{
 		SkipLoginRequired: true,
 	})
 	if err != nil {

@@ -27,7 +27,7 @@ For example: ^6.2.0 or >=4.0.0`,
 
 func listSdks(_ *cobra.Command, args []string) (err error) {
 	ctx := context.Background()
-	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{
+	mngr, ctx, err := manager.NewManager(ctx, manager.Config{
 		SkipAgreementCheck: true,
 		SkipLoginRequired:  true,
 	})

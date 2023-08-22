@@ -16,12 +16,12 @@ type Manager struct {
 	Store *storage.Store
 }
 
-type ManagerConfig struct {
+type Config struct {
 	SkipAgreementCheck bool
 	SkipLoginRequired  bool
 }
 
-func NewManager(ctx context.Context, config ManagerConfig) (Manager, context.Context, error) {
+func NewManager(ctx context.Context, config Config) (Manager, context.Context, error) {
 	store := storage.NewStore()
 	mngr := Manager{
 		Store: store,

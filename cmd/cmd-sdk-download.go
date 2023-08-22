@@ -29,7 +29,7 @@ func SDKDownloadCmd() *cobra.Command {
 
 func downloadSDKs(_ *cobra.Command, args []string) error {
 	ctx := context.Background()
-	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{
+	mngr, ctx, err := manager.NewManager(ctx, manager.Config{
 		SkipLoginRequired: true,
 	})
 	if err != nil {

@@ -31,7 +31,7 @@ var md5regexp = regexp.MustCompile("^[a-fA-F0-9]{32}$")
 
 func acceptAgreement(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
-	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{
+	mngr, ctx, err := manager.NewManager(ctx, manager.Config{
 		SkipAgreementCheck: true,
 		SkipLoginRequired:  true,
 	})

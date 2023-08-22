@@ -24,7 +24,7 @@ func DeviceDownloadCmd() *cobra.Command {
 
 func download(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
-	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{})
+	mngr, ctx, err := manager.NewManager(ctx, manager.Config{})
 	if err != nil {
 		return err
 	}
