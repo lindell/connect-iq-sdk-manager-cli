@@ -62,7 +62,7 @@ curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/mas
 Or a specific version.
 ```bash
 curl -s https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sh -s -- -d vX.X.X
-````
+```
 
 ### From source
 You can also install from source with `go install`, this is not recommended for most cases.
@@ -87,7 +87,7 @@ All configuration can be done through command line flags, configuration files or
 
 ## Usage
 {{range .Commands}}
-* [{{ .Name }}](#-usage-of-{{ .Path }}) {{ .Short }}{{end}}
+* [{{ .Name }}](#usage-of-{{ .Path }}) {{ .Short }}{{end}}
 
 {{range .Commands}}
 ### Usage of `{{.Name}}`
