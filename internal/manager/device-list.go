@@ -11,7 +11,7 @@ type DeviceListConfig struct {
 }
 
 func (m *Manager) ListDevices(ctx context.Context, config DeviceListConfig) error {
-	deviceInfos, err := client.GetDeviceInfo(ctx)
+	deviceInfos, err := getDeviceInfo(ctx)
 	if err != nil {
 		return err
 	}

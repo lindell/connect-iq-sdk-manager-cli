@@ -1,11 +1,16 @@
 package manager
 
 import (
+	"context"
 	"encoding/xml"
+	"fmt"
 	"os"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/datetime"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 )
 
 // DeviceFilters describes which devices should be filtered
@@ -47,6 +52,40 @@ func filterDeviceNames(devices []client.DeviceInfo, deviceNames []string) ([]cli
 	}
 
 	return newDevices, nil
+}
+
+func getDeviceInfo(ctx context.Context) ([]client.DeviceInfo, error) {
+	deviceInfos, err := client.GetDeviceInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if err := storeDeviceFirstSeen(deviceInfos); err != nil {
+		log.Errorf("Could not store first seen: %s", err)
+	}
+	return deviceInfos, nil
+}
+
+// storeDeviceFirstSeen stores the first time a device was seen in the config file
+// This is not used by the CLI, but is stored by the GUI
+func storeDeviceFirstSeen(devices []client.DeviceInfo) error {
+	firstSeenKeys := make([]string, len(devices))
+	for i, d := range devices {
+		firstSeenKeys[i] = fmt.Sprintf("%s-first-seen", d.Name)
+	}
+
+	alreadySeen := connectiq.LoadConfigVals(firstSeenKeys...)
+
+	notYetSeens := []connectiq.ConfigEntity{}
+	for i := range alreadySeen {
+		if alreadySeen[i] == "" {
+			notYetSeens = append(notYetSeens, connectiq.ConfigEntity{
+				Key:   firstSeenKeys[i],
+				Value: datetime.Now().String(),
+			})
+		}
+	}
+
+	return connectiq.StoreConfigKeyVals(notYetSeens...)
 }
 
 // manifest contains data from the manifest.xml file

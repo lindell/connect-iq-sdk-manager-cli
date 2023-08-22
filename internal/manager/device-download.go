@@ -2,6 +2,7 @@ package manager
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path"
 
@@ -16,7 +17,7 @@ type DownloadConfig struct {
 }
 
 func (m *Manager) Download(ctx context.Context, config DownloadConfig) error {
-	deviceInfos, err := client.GetDeviceInfo(ctx)
+	deviceInfos, err := getDeviceInfo(ctx)
 	if err != nil {
 		return err
 	}
@@ -59,6 +60,9 @@ func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device c
 	}
 	defer r.Close()
 
-	_, err = fetchAndExtract(r, deviceDir)
+	hash, err := fetchAndExtract(r, deviceDir)
+	if err := connectiq.StoreConfigKeyVal(fmt.Sprintf("%s-hash", device.Name), hash); err != nil {
+		log.Errorf("Could not store hash: %s", err)
+	}
 	return err
 }
