@@ -77,7 +77,7 @@ All configuration can be done through command line flags, configuration files or
 
 
 <details>
-  <summary>All available `agreement accept` options</summary>
+  <summary>All available <code>agreement accept</code> options</summary>
 
 ```yaml
 # The hash of a previously read agreement.
@@ -96,7 +96,7 @@ log-level: info
 
 
 <details>
-  <summary>All available `agreement view` options</summary>
+  <summary>All available <code>agreement view</code> options</summary>
 
 ```yaml
 # The file where all logs should be printed to. "-" means stdout.
@@ -112,7 +112,7 @@ log-level: info
 
 
 <details>
-  <summary>All available `device download` options</summary>
+  <summary>All available <code>device download</code> options</summary>
 
 ```yaml
 # The device(s) that should be used.
@@ -141,7 +141,7 @@ manifest:
 
 
 <details>
-  <summary>All available `device list` options</summary>
+  <summary>All available <code>device list</code> options</summary>
 
 ```yaml
 # The device(s) that should be used.
@@ -167,7 +167,7 @@ manifest:
 
 
 <details>
-  <summary>All available `login` options</summary>
+  <summary>All available <code>login</code> options</summary>
 
 ```yaml
 # The file where all logs should be printed to. "-" means stdout.
@@ -189,7 +189,7 @@ username:
 
 
 <details>
-  <summary>All available `sdk current-path` options</summary>
+  <summary>All available <code>sdk current-path</code> options</summary>
 
 ```yaml
 # Print binary path
@@ -208,7 +208,7 @@ log-level: info
 
 
 <details>
-  <summary>All available `sdk download` options</summary>
+  <summary>All available <code>sdk download</code> options</summary>
 
 ```yaml
 # The file where all logs should be printed to. "-" means stdout.
@@ -224,7 +224,7 @@ log-level: info
 
 
 <details>
-  <summary>All available `sdk list` options</summary>
+  <summary>All available <code>sdk list</code> options</summary>
 
 ```yaml
 # The file where all logs should be printed to. "-" means stdout.
@@ -240,7 +240,7 @@ log-level: info
 
 
 <details>
-  <summary>All available `sdk set` options</summary>
+  <summary>All available <code>sdk set</code> options</summary>
 
 ```yaml
 # The file where all logs should be printed to. "-" means stdout.
