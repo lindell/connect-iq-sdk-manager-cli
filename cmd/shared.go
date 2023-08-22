@@ -3,18 +3,8 @@ package cmd
 import (
 	"strings"
 
-	"github.com/lindell/connect-iq-sdk-manager-cli/internal/manager"
-	"github.com/lindell/connect-iq-sdk-manager-cli/internal/storage"
 	"github.com/pkg/errors"
 )
-
-func NewManager() manager.Manager {
-	store := storage.NewStore()
-
-	return manager.Manager{
-		Store: store,
-	}
-}
 
 func checkExclusivity(options map[string]bool) error {
 	enabledOptions := []string{}

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Masterminds/semver/v3"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/manager"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -26,8 +27,13 @@ For example: ^6.2.0 or >=4.0.0`,
 
 func listSdks(_ *cobra.Command, args []string) (err error) {
 	ctx := context.Background()
-
-	mngr := NewManager()
+	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{
+		SkipAgreementCheck: true,
+		SkipLoginRequired:  true,
+	})
+	if err != nil {
+		return err
+	}
 
 	semverConstraint, _ := semver.NewConstraint("*")
 	if len(args) > 0 {

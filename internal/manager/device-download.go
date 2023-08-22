@@ -16,11 +16,6 @@ type DownloadConfig struct {
 }
 
 func (m *Manager) Download(ctx context.Context, config DownloadConfig) error {
-	var err error
-	if ctx, err = m.setTokenToCtx(ctx); err != nil {
-		return err
-	}
-
 	deviceInfos, err := client.GetDeviceInfo(ctx)
 	if err != nil {
 		return err

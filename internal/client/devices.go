@@ -9,23 +9,24 @@ import (
 	"net/url"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/datetime"
 	"github.com/pkg/errors"
 )
 
 type DeviceInfo struct {
-	DeviceUUID            string             `json:"deviceUuid"`
-	PartNumber            string             `json:"partNumber"`
-	Name                  string             `json:"name"`
-	ProductInfoFileExists bool               `json:"productInfoFileExists"`
-	CiqInfoFileExists     bool               `json:"ciqInfoFileExists"`
-	Upcoming              bool               `json:"upcoming"`
-	ProductInfoHash       string             `json:"productInfoHash"`
-	CiqInfoHash           string             `json:"ciqInfoHash"`
-	Group                 string             `json:"group"`
-	DisplayName           string             `json:"displayName"`
-	LastUpdateTime        connectiq.DateTime `json:"lastUpdateTime"`
-	Hidden                bool               `json:"hidden"`
-	Faceit2Capable        bool               `json:"faceit2Capable"`
+	DeviceUUID            string            `json:"deviceUuid"`
+	PartNumber            string            `json:"partNumber"`
+	Name                  string            `json:"name"`
+	ProductInfoFileExists bool              `json:"productInfoFileExists"`
+	CiqInfoFileExists     bool              `json:"ciqInfoFileExists"`
+	Upcoming              bool              `json:"upcoming"`
+	ProductInfoHash       string            `json:"productInfoHash"`
+	CiqInfoHash           string            `json:"ciqInfoHash"`
+	Group                 string            `json:"group"`
+	DisplayName           string            `json:"displayName"`
+	LastUpdateTime        datetime.DateTime `json:"lastUpdateTime"`
+	Hidden                bool              `json:"hidden"`
+	Faceit2Capable        bool              `json:"faceit2Capable"`
 }
 
 var devicesURL = "https://api.gcs.garmin.com/ciq-product-onboarding/devices?sdkManagerVersion=1.0.5"

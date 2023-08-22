@@ -24,10 +24,12 @@ func DeviceDownloadCmd() *cobra.Command {
 
 func download(cmd *cobra.Command, _ []string) error {
 	ctx := context.Background()
+	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{})
+	if err != nil {
+		return err
+	}
 
 	includeFonts, _ := cmd.Flags().GetBool("include-fonts")
-
-	mngr := NewManager()
 
 	deviceFilters, err := getDeviceFilters(cmd)
 	if err != nil {

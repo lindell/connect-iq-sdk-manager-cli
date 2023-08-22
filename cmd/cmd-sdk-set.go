@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Masterminds/semver/v3"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/manager"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
@@ -25,8 +26,12 @@ func SDKSetCmd() *cobra.Command {
 
 func setSDK(_ *cobra.Command, args []string) error {
 	ctx := context.Background()
-
-	mngr := NewManager()
+	mngr, ctx, err := manager.NewManager(ctx, manager.ManagerConfig{
+		SkipLoginRequired: true,
+	})
+	if err != nil {
+		return err
+	}
 
 	semverConstraint, err := semver.NewConstraint(args[0])
 	if err != nil {

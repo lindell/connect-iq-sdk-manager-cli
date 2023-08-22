@@ -2,17 +2,46 @@ package manager
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/connectiq"
+	"github.com/lindell/connect-iq-sdk-manager-cli/internal/datetime"
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/storage"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
 type Manager struct {
 	Store *storage.Store
+}
+
+type ManagerConfig struct {
+	SkipAgreementCheck bool
+	SkipLoginRequired  bool
+}
+
+func NewManager(ctx context.Context, config ManagerConfig) (Manager, context.Context, error) {
+	store := storage.NewStore()
+	mngr := Manager{
+		Store: store,
+	}
+
+	if !config.SkipAgreementCheck {
+		if err := checkAgreement(ctx); err != nil {
+			return Manager{}, ctx, err
+		}
+	}
+
+	if !config.SkipLoginRequired {
+		var err error
+		ctx, err = mngr.setTokenToCtx(ctx)
+		if err != nil {
+			return Manager{}, ctx, err
+		}
+	}
+
+	return mngr, ctx, nil
 }
 
 func (m *Manager) setTokenToCtx(ctx context.Context) (context.Context, error) {
@@ -53,4 +82,36 @@ func (m *Manager) refreshAndSaveToken(ctx context.Context, token connectiq.Token
 	}
 
 	return newToken, nil
+}
+
+func checkAgreement(ctx context.Context) error {
+	vals := connectiq.LoadConfigVals("agreement-hash", "agreement-hash-verified-at")
+	hash := vals[0]
+	acceptedAtStr := vals[1]
+
+	if hash == "" {
+		return errors.New("agreement is not accepted. Please do so with the `agreement` command")
+	}
+
+	// If acceptance was made within one our, don't make a request to make sure the agreement hasn't changed.
+	if acceptedAtStr != "" {
+		acceptedAt, err := datetime.Parse(acceptedAtStr)
+		if err != nil {
+			return err
+		}
+		if time.Now().Before(acceptedAt.Time().Add(time.Hour)) {
+			return nil
+		}
+	}
+
+	currentHash, err := client.AgreementHash(ctx)
+	if err != nil {
+		return err
+	}
+
+	if currentHash != hash {
+		return errors.Errorf("accepted agreement is to old. Old hash is %q, new hash is %q", hash, currentHash)
+	}
+
+	return nil
 }
