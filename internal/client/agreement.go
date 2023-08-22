@@ -37,6 +37,8 @@ func AgreementHash(ctx context.Context) (string, error) {
 	disc, err := doc.Find(".disclaimer").Html()
 	if err != nil {
 		return "", errors.WithMessage(err, "could not get disclaimer text")
+	} else if disc == "" {
+		return "", errors.New("could not get disclaimer text")
 	}
 
 	hash := md5.New() //nolint:gosec

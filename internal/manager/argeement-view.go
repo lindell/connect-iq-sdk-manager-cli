@@ -13,7 +13,7 @@ func (m *Manager) ViewAgreement(ctx context.Context) error {
 
 	hash, err := client.AgreementHash(ctx)
 	if err != nil {
-		fmt.Printf("Could not fetch current hash: %s", err)
+		fmt.Printf("Could not fetch current hash: %s\n", err)
 	} else {
 		fmt.Printf("Current Hash: %s\n", hash)
 	}

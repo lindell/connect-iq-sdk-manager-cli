@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// AgreementAcceptCmd gives a link to the agreement
+// AgreementAcceptCmd accepts the license agreement
 func AgreementAcceptCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "accept",
