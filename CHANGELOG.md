@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.5.0...v0.6.0) (2023-08-22)
+
+
+### Features
+
+* added agreement commands ([#23](https://github.com/lindell/connect-iq-sdk-manager-cli/issues/23)) ([dba538f](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/dba538fcd4f9fea9361d0b9830787a4b90aa2026))
+* added include-fonts flag for device download ([#20](https://github.com/lindell/connect-iq-sdk-manager-cli/issues/20)) ([ff45151](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/ff45151c0c30f1d1cedfbba17ab76ac0e91dd8f3))
+* sdk path is also added to the config ini ([2ac7714](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/2ac771477159084180ad75547a8f9f2dea653a99))
+
 ## [0.5.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.4.0...v0.5.0) (2023-08-16)
 
 
