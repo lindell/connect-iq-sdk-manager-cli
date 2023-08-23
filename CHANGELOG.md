@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.6.0...v0.7.0) (2023-08-23)
+
+
+### Features
+
+* store first-seen and hash of devices in config file ([47012b7](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/47012b73465fdb5a3803f90bf40e469c0fd10086))
+
+
+### Bug Fixes
+
+* ensure ConnectIQ folder exist before starting ([7d5eeca](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/7d5eeca1bcb8ff15f1b28e0872dcebcc00079651))
+
 ## [0.6.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.5.0...v0.6.0) (2023-08-22)
 
 
