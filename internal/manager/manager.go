@@ -2,6 +2,7 @@ package manager
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"github.com/lindell/connect-iq-sdk-manager-cli/internal/client"
@@ -22,6 +23,10 @@ type Config struct {
 }
 
 func NewManager(ctx context.Context, config Config) (Manager, context.Context, error) {
+	if err := os.MkdirAll(connectiq.RootPath, 0755); err != nil {
+		return Manager{}, ctx, errors.WithMessage(err, "could not ensure ConnectIQ root directory exist")
+	}
+
 	store := storage.NewStore()
 	mngr := Manager{
 		Store: store,
