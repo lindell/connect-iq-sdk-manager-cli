@@ -38,7 +38,9 @@ func (m *Manager) downloadFonts(ctx context.Context, deviceInfos []client.Device
 			continue
 		}
 
-		if err := m.fetchFont(ctx, log, fontFilename); err != nil {
+		if err := m.fetchFont(ctx, log, fontFilename); isNotFound(err) {
+			log.Error(errors.WithMessage(err, "font did not exist to download"))
+		} else if err != nil {
 			return errors.WithMessagef(err, "unable to download font: %q", fontFilename)
 		}
 	}

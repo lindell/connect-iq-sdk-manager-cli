@@ -33,20 +33,22 @@ func unzip(source, destination string) error {
 
 		// Remove file if it already exists; no problem if it doesn't; other cases can error out below
 		_ = os.Remove(path)
-		// Create a directory at path, including parents
-		err = os.MkdirAll(path, os.ModePerm)
-		if err != nil {
-			return err
-		}
-		// If file is _supposed_ to be a directory, we're done
+
+		// Create a directory, including parents
 		if file.FileInfo().IsDir() {
+			err = os.MkdirAll(path, os.ModePerm)
+			if err != nil {
+				return err
+			}
 			continue
 		}
-		// otherwise, remove that directory (_not_ including parents)
-		err = os.Remove(path)
+
+		// Create a directory at path, including parents
+		err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
 		if err != nil {
 			return err
 		}
+
 		// and create the actual file.  This ensures that the parent directories exist!
 		// An archive may have a single file with a nested path, rather than a file for each parent dir
 		writer, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, file.Mode())
@@ -85,4 +87,16 @@ func fetchAndExtract(r io.Reader, destination string) (md5sum string, err error)
 		Debugf("Unzipping file")
 
 	return md5hash, unzip(f.Name(), destination)
+}
+
+func isNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if errNotFound, ok := err.(interface{ NotFound() bool }); ok && errNotFound.NotFound() {
+		return true
+	}
+
+	return isNotFound(errors.Unwrap(err))
 }

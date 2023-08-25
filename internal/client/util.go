@@ -2,7 +2,6 @@ package client
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/url"
 
@@ -23,12 +22,14 @@ func expectStatusCode(resp *http.Response, status ...int) error {
 		}
 	}
 
+	err := unexpectedStatusCodeError{code: resp.StatusCode}
+
 	var errorResp errorResponse
 	if err := json.NewDecoder(resp.Body).Decode(&errorResp); err != nil || errorResp.Error == "" {
-		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return err
 	}
 
-	return errors.Errorf("%s: %s", errorResp.Error, errorResp.Message)
+	return errors.WithMessagef(err, "%s: %s", errorResp.Error, errorResp.Message)
 }
 
 func urlMustParse(s string) *url.URL {
