@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.7.0...v0.7.1) (2023-08-25)
+
+
+### Bug Fixes
+
+* make sure font download does not error if font does not exist ([f1c4664](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/f1c466478b45974f5eaf4580aea7e70499b21952))
+
 ## [0.7.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.6.0...v0.7.0) (2023-08-23)
 
 
