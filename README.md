@@ -46,9 +46,9 @@ monkeyc -f your-app/monkey.jungle -w -e -o output.iq
 ## Install
 
 ### Homebrew
-If you are using Mac or Linux, [Homebrew](https://brew.sh/) is an easy way of installing connect-iq-sdk-manager.
+If you are using Linux, [Homebrew](https://brew.sh/) is an easy way of installing connect-iq-sdk-manager.
 ```bash
-brew install lindell/connect-iq-sdk-manager-cli/connect-iq-sdk-manager
+brew install lindell/connect-iq-sdk-manager-cli/connect-iq-sdk-manager-cli
 ```
 
 ### Manual binary install
