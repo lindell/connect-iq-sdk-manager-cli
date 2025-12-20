@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -64,9 +65,10 @@ func unzip(source, destination string) error {
 	return nil
 }
 
-func fetchAndExtract(r io.Reader, destination string) (md5sum string, err error) {
-	// Save the zip to a temporary file
-	f, err := os.CreateTemp(os.TempDir(), "*.zip")
+func fetchAndExtract(r io.Reader, destination string, filename string) (md5sum string, err error) {
+	// Save the zip/dmg to a temporary file
+	ext := filepath.Ext(filename)
+	f, err := os.CreateTemp(os.TempDir(), "*"+ext)
 	if err != nil {
 		return "", errors.WithMessage(err, "could not create tmp device file")
 	}
@@ -81,12 +83,90 @@ func fetchAndExtract(r io.Reader, destination string) (md5sum string, err error)
 	}
 	md5hash := fmt.Sprintf("%x", m.Sum(nil))
 
-	logrus.
+	logger := logrus.
 		WithField("hash", md5hash).
-		WithField("destination", destination).
-		Debugf("Unzipping file")
+		WithField("destination", destination)
 
+	if ext == ".dmg" {
+		logger.Debugf("Installing DMG file")
+		return md5hash, installDMG(f.Name(), destination)
+	}
+
+	logger.Debugf("Unzipping file")
 	return md5hash, unzip(f.Name(), destination)
+}
+
+func installDMG(source, destination string) error {
+	// Mount the DMG
+	// hdiutil attach -nobrowse -mountpoint /path/to/mountpoint /path/to/dmg
+	mountPoint, err := os.MkdirTemp("", "dmg-mount")
+	if err != nil {
+		return errors.Wrap(err, "failed to create mount point")
+	}
+	defer os.Remove(mountPoint)
+
+	cmd := exec.Command("hdiutil", "attach", "-nobrowse", "-mountpoint", mountPoint, source)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return errors.Wrapf(err, "failed to mount dmg: %s", string(output))
+	}
+	defer func() {
+		// Detach the DMG
+		// hdiutil detach /path/to/mountpoint
+		cmd := exec.Command("hdiutil", "detach", mountPoint, "-force")
+		if output, err := cmd.CombinedOutput(); err != nil {
+			logrus.Errorf("failed to detach dmg: %s", string(output))
+		}
+	}()
+
+	// Copy the contents
+	// For SDKs, there is usually a folder inside the DMG. We want to copy the contents
+	// of that folder to destination. Because of how unzip works (it unzips the
+	// folder structure), we expect 'destination' to be the directory that WILL
+	// contain the SDK contents. But the SDK zip/dmg usually contains a root folder
+	// (e.g. connectiq-sdk-mac-4.1.4). So we need to look into the mount point,
+	// find the single directory there, and copy IT explicitly.
+
+	failed := true
+	defer func() {
+		if failed {
+			os.RemoveAll(destination)
+		}
+	}()
+
+	entries, err := os.ReadDir(mountPoint)
+	if err != nil {
+		return errors.Wrap(err, "failed to read mount point")
+	}
+
+	// Filter out hidden files
+	var visibleEntries []os.DirEntry
+	for _, entry := range entries {
+		if !strings.HasPrefix(entry.Name(), ".") {
+			visibleEntries = append(visibleEntries, entry)
+		}
+	}
+
+	if len(visibleEntries) != 1 || !visibleEntries[0].IsDir() {
+		return errors.Errorf("expected exactly one directory in DMG, found %d", len(visibleEntries))
+	}
+
+	srcDir := filepath.Join(mountPoint, visibleEntries[0].Name())
+
+	// Copy the directory found in the DMG to the destination path.
+	// This mimics the behavior of unzip by placing the SDK root folder at the
+	// destination.
+
+	if err := os.MkdirAll(filepath.Dir(destination), 0755); err != nil {
+		return errors.Wrap(err, "failed to create destination parent dir")
+	}
+
+	cmd = exec.Command("cp", "-R", srcDir, destination)
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return errors.Wrapf(err, "failed to copy files: %s", string(output))
+	}
+
+	failed = false
+	return nil
 }
 
 func isNotFound(err error) bool {
