@@ -96,7 +96,7 @@ func fetchAndExtract(r io.Reader, destination string, filename string) (md5sum s
 	return md5hash, unzip(f.Name(), destination)
 }
 
-func installDMG(source, destination string) error {
+func installDMG(source, destination string) (err error) {
 	// Mount the DMG
 	// hdiutil attach -nobrowse -mountpoint /path/to/mountpoint /path/to/dmg
 	mountPoint, err := os.MkdirTemp("", "dmg-mount")
@@ -107,6 +107,8 @@ func installDMG(source, destination string) error {
 
 	cmd := exec.Command("hdiutil", "attach", "-nobrowse", "-mountpoint", mountPoint, source)
 	if output, err := cmd.CombinedOutput(); err != nil {
+		// Try to detach, in case the attach failed but still mounted.
+		_ = exec.Command("hdiutil", "detach", mountPoint, "-force").Run()
 		return errors.Wrapf(err, "failed to mount dmg: %s", string(output))
 	}
 	defer func() {
@@ -126,9 +128,8 @@ func installDMG(source, destination string) error {
 	// (e.g. connectiq-sdk-mac-4.1.4). So we need to look into the mount point,
 	// find the single directory there, and copy IT explicitly.
 
-	failed := true
 	defer func() {
-		if failed {
+		if err != nil {
 			os.RemoveAll(destination)
 		}
 	}()
@@ -165,7 +166,6 @@ func installDMG(source, destination string) error {
 		return errors.Wrapf(err, "failed to copy files: %s", string(output))
 	}
 
-	failed = false
 	return nil
 }
 
