@@ -106,11 +106,6 @@ func installDMG(source, destination string) (err error) {
 	defer os.Remove(mountPoint)
 
 	cmd := exec.Command("hdiutil", "attach", "-nobrowse", "-mountpoint", mountPoint, source)
-	if output, err := cmd.CombinedOutput(); err != nil {
-		// Try to detach, in case the attach failed but still mounted.
-		_ = exec.Command("hdiutil", "detach", mountPoint, "-force").Run()
-		return errors.Wrapf(err, "failed to mount dmg: %s", string(output))
-	}
 	defer func() {
 		// Detach the DMG
 		// hdiutil detach /path/to/mountpoint
@@ -119,6 +114,9 @@ func installDMG(source, destination string) (err error) {
 			logrus.Errorf("failed to detach dmg: %s", string(output))
 		}
 	}()
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return errors.Wrapf(err, "failed to mount dmg: %s", string(output))
+	}
 
 	// Copy the contents
 	// For SDKs, there is usually a folder inside the DMG. We want to copy the contents
