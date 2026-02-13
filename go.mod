@@ -1,6 +1,6 @@
 module github.com/lindell/connect-iq-sdk-manager-cli
 
-go 1.19
+go 1.25
 
 require (
 	github.com/Masterminds/semver/v3 v3.2.1

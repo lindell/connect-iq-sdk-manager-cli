@@ -159,9 +159,8 @@ func installDMG(source, destination string) (err error) {
 		return errors.Wrap(err, "failed to create destination parent dir")
 	}
 
-	cmd = exec.Command("cp", "-R", srcDir, destination)
-	if output, err := cmd.CombinedOutput(); err != nil {
-		return errors.Wrapf(err, "failed to copy files: %s", string(output))
+	if err := os.CopyFS(destination, os.DirFS(srcDir)); err != nil {
+		return errors.Wrap(err, "failed to copy files")
 	}
 
 	return nil
