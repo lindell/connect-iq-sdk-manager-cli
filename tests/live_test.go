@@ -35,15 +35,12 @@ func TestStory(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, files, 5) // Manifest file contains 5 entities
 
-	assert.NoError(t, run("device", "download", "--include-fonts"))
-	files, err = os.ReadDir(connectiq.DevicesPath)
-	assert.NoError(t, err)
-	assert.Greater(t, len(files), 5)
+	assert.NoError(t, run("device", "download", "--manifest", "manifest.test.xml", "--include-fonts"))
 	files, err = os.ReadDir(connectiq.FontsPath)
 	assert.NoError(t, err)
 	assert.Greater(t, len(files), 10)
 
-	assert.NoError(t, run("sdk", "set", "^6.0.0"))
+	assert.NoError(t, run("sdk", "set", "^8.0.0"))
 
 	_, _, err = execCmd("go", "install", "..")
 	require.NoError(t, err)

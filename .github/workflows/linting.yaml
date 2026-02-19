@@ -4,6 +4,9 @@ jobs:
   golangci-lint:
     name: golangci-lint
     runs-on: ubuntu-latest
+    permissions:
+      checks: write  # for reviewdog/action-golangci-lint to report issues using checks
+      contents: read  # for actions/checkout to fetch code
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
