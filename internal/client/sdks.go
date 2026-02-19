@@ -28,6 +28,8 @@ func (s SDK) Filename() (string, error) {
 		return s.Windows, nil
 	case "linux":
 		return s.Linux, nil
+	case "darwin":
+		return s.Mac, nil
 	default:
 		return "", errors.Errorf("can't find filename for OS %q", runtime.GOOS)
 	}

@@ -56,7 +56,7 @@ func (m *Manager) fetchFont(ctx context.Context, log log.FieldLogger, font strin
 	}
 	defer r.Close()
 
-	md5hash, err := fetchAndExtract(r, connectiq.FontsPath)
+	md5hash, err := fetchAndExtract(r, connectiq.FontsPath, font)
 	if err != nil {
 		return err
 	}

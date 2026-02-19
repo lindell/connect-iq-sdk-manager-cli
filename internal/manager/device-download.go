@@ -60,7 +60,7 @@ func (m *Manager) fetchDevice(ctx context.Context, log log.FieldLogger, device c
 	}
 	defer r.Close()
 
-	hash, err := fetchAndExtract(r, deviceDir)
+	hash, err := fetchAndExtract(r, deviceDir, "device.zip")
 	if err := connectiq.StoreConfigKeyVal(fmt.Sprintf("%s-hash", device.Name), hash); err != nil {
 		log.Errorf("Could not store hash: %s", err)
 	}

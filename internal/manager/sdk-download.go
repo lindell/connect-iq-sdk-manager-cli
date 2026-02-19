@@ -46,7 +46,12 @@ func downloadSDK(ctx context.Context, sdk client.SDK) error {
 		return err
 	}
 
-	_, err = fetchAndExtract(r, sdkDir)
+	filename, err := sdk.Filename()
+	if err != nil {
+		return err
+	}
+
+	_, err = fetchAndExtract(r, sdkDir, filename)
 	return err
 }
 
@@ -56,7 +61,10 @@ func sdkPath(sdk client.SDK) (string, error) {
 		return "", err
 	}
 
-	return path.Join(connectiq.SDKsPath, strings.TrimSuffix(filename, ".zip")), nil
+	filename = strings.TrimSuffix(filename, ".zip")
+	filename = strings.TrimSuffix(filename, ".dmg")
+
+	return path.Join(connectiq.SDKsPath, filename), nil
 }
 
 func latestMatchingSDK(ctx context.Context, semverConstraint *semver.Constraints) (client.SDK, error) {
