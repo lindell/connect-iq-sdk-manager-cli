@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.2...v0.8.3) (2026-02-22)
+
+
+### Bug Fixes
+
+* update GitHub Actions workflows to use latest action versions ([c13bab2](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/c13bab24d8039608263d78f1807c810074a1fd3c))
+
 ## [0.8.2](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.1...v0.8.2) (2026-02-22)
 
 
