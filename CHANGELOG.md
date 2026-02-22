@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.7.1...v0.8.0) (2026-02-22)
+
+
+### Features
+
+* support macOS ([#29](https://github.com/lindell/connect-iq-sdk-manager-cli/issues/29)) ([9862ae5](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/9862ae5a654c564a82c93be1007375baf0215854))
+
 ## [0.7.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.7.0...v0.7.1) (2023-08-25)
 
 
