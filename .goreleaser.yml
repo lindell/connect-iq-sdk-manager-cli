@@ -1,3 +1,4 @@
+version: 2
 before:
   hooks:
     - go mod download
@@ -54,30 +55,33 @@ nfpms:
 checksum:
   name_template: "checksums.txt"
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  version_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
       - "^docs:"
       - "^test:"
-brews:
+homebrew_casks:
   - name: connect-iq-sdk-manager-cli
     repository:
       owner: lindell
       name: homebrew-connect-iq-sdk-manager-cli
-    goarm: 6
     commit_author:
       name: Johan Lindell
       email: johan@lindell.me
     description: CLI to download connectIQ resources
     homepage: https://github.com/lindell/connect-iq-sdk-manager-cli
     license: "Apache-2.0"
-    folder: Formula
-    install: |-
-      bin.install "connect-iq-sdk-manager"
-      bash_completion.install "completions/connect-iq-sdk-manager.bash" => "connect-iq-sdk-manager"
-      zsh_completion.install "completions/connect-iq-sdk-manager.zsh" => "_connect-iq-sdk-manager"
-      fish_completion.install "completions/connect-iq-sdk-manager.fish"
-    test: |
-      system "#{bin}/connect-iq-sdk-manager", "version"
+    completions:
+      bash: "completions/connect-iq-sdk-manager.bash"
+      zsh: "completions/connect-iq-sdk-manager.zsh"
+      fish: "completions/connect-iq-sdk-manager.fish"
+    url:
+      verified: github.com/lindell/connect-iq-sdk-manager-cli
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/connect-iq-sdk-manager"]
+          end
