@@ -12,13 +12,13 @@ jobs:
       issues: write # needed for github-release-commenter
       pull-requests: write # needed for release-please and github-release-commenter
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3.7.10
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
           package-name: connect-iq-sdk-manager
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false},{"type":"dep","section":"Dependencies","hidden":false}]'
+          changelog-sections: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false},{"type":"dep","section":"Dependencies","hidden":false}]'
 
       - uses: actions/checkout@v4
         with:
