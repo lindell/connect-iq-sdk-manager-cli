@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.4](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.3...v0.8.4) (2026-02-22)
+
+
+### Bug Fixes
+
+* fixed token ([d2f06df](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/d2f06df201740171512c9bdc2d8335f20dbe6b5b))
+
 ## [0.8.3](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.2...v0.8.3) (2026-02-22)
 
 
