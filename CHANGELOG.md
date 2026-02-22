@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.1...v0.8.2) (2026-02-22)
+
+
+### Miscellaneous
+
+* update GitHub Actions to use checkout@v4 and setup-go@v5 ([32b2d4c](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/32b2d4cd621aec68a0d3a4d0e38d0faad29b9e38))
+
 ## [0.8.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.0...v0.8.1) (2026-02-22)
 
 
