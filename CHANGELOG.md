@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.8.0...v0.8.1) (2026-02-22)
+
+
+### Bug Fixes
+
+* update GoReleaser args to use --clean instead of --rm-dist ([88f5626](https://github.com/lindell/connect-iq-sdk-manager-cli/commit/88f56261febf5d6fdc426db8ca800f4a281537e6))
+
 ## [0.8.0](https://github.com/lindell/connect-iq-sdk-manager-cli/compare/v0.7.1...v0.8.0) (2026-02-22)
 
 
