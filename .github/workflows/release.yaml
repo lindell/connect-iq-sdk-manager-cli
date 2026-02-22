@@ -35,7 +35,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v7
         with:
           version: '~> v2'
-          args: release --rm-dist
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GENERAL_GITHUB_SECRET }} # The tokens needs access to another repo, so the secret.GITHUB_SECRET won't suffice
         if: ${{ steps.release.outputs.release_created }}
