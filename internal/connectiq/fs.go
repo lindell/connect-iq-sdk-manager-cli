@@ -3,7 +3,6 @@ package connectiq
 import (
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -32,14 +31,19 @@ func rootGarminFolder() (string, error) {
 		if appDataFolder == "" {
 			return "", errors.New("could not find appdata folder")
 		}
-		return path.Join(appDataFolder, "Garmin", "ConnectIQ"), nil
+		return filepath.Join(appDataFolder, "Garmin", "ConnectIQ"), nil
 	}
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", errors.WithMessage(err, "could not get the home directory")
 	}
-	return path.Join(homeDir, ".Garmin", "ConnectIQ"), nil
+	if runtime.GOOS == "darwin" {
+		homeDir = filepath.Join(homeDir, "Library", "Application Support", "Garmin")
+	} else {
+		homeDir = filepath.Join(homeDir, ".Garmin")
+	}
+	return filepath.Join(homeDir, "ConnectIQ"), nil
 }
 
 var sdkVersionRegexp = regexp.MustCompile(`^connectiq-sdk-\w+-([\d.]+)-`)
